@@ -73,12 +73,10 @@ function validateName(index) {
 <style scoped>
 
 .tabs-list {
-  --tab-size: 1.5rem;
+  --tab-size: 2rem;
   background-color: var(--color-tertiary);
   display: flex;
   min-height: var(--tab-size);
-  border-top-left-radius: var(--image-selector-border-radius);
-  border-top-right-radius: var(--image-selector-border-radius);
   padding: 0.1rem 1rem;
   gap: 0.15rem;
   flex-wrap: wrap;
