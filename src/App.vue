@@ -81,6 +81,7 @@ onMounted(() => {
     <span class="main-content">
       <div class="image-selector-container">
         <mag-tabs :tabs="tabs"
+                  class="image-selector__tabs"
                   v-model:tabs="tabs"
                   v-model:active-tab="selectedTab" />
         <image-selector
@@ -194,6 +195,11 @@ onMounted(() => {
   flex-basis: 100%;
   border-bottom-left-radius: var(--image-selector-border-radius);
   border-bottom-right-radius: var(--image-selector-border-radius);
+}
+
+.image-selector__tabs {
+  border-top-left-radius: var(--image-selector-border-radius);
+  border-top-right-radius: var(--image-selector-border-radius);
 }
 
 /* 2. Settings */
