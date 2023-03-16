@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ImageViewer from './ImageViewer.vue';
 import MagOverlay from './MagOverlay.vue';
 
@@ -32,9 +34,10 @@ const showOverlay = ref(true);
       </ImageViewer>
       <template #overlay>
         <div class="overlay">
-          <div class="trash-icon" draggable="false" @click="emit('remove:image', img)">
-            X
-          </div>
+          <font-awesome-icon
+              class="trash-icon"
+              :icon="faTrash"
+              @click="emit('remove:image', img)" />
         </div>
       </template>
     </MagOverlay>
@@ -55,7 +58,7 @@ const showOverlay = ref(true);
 
 .image {
   height: 100%;
-  box-shadow: black 0px 0px 4px;
+  box-shadow: black 0 0 4px;
 }
 
 .preview-list {
@@ -75,7 +78,7 @@ const showOverlay = ref(true);
   padding: 0.10rem 0.5rem;
   place-content: end;
   transition: opacity 0.1s ease-in-out;
-  opacity: 0%;
+  opacity: 0;
   border-radius: 0.5rem;
   position: relative;
   z-index: 0;
@@ -88,8 +91,6 @@ const showOverlay = ref(true);
 
 .trash-icon {
   opacity: 100%;
-  width: fit-content;
-  height: fit-content;
   cursor: pointer;
   color: var(--color-black);
   background-color: var(--color-white);
