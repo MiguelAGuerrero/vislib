@@ -32,6 +32,7 @@ function readDataUrl(file) {
 }
 
 function readFile(file) {
+  console.log('reading file', file);
   if (file.type === 'text/csv') {
     readCsv(file);
     return;
@@ -43,22 +44,55 @@ function readFile(file) {
   console.warn('file is not an image', file);
 }
 
+function readDirectory(item) {
+  return item;
+}
+
+function readDragAndDropFromImageSearchEngine(item) {
+  item.getAsString((data) => {
+    console.log('read item as string', data);
+    const matchers = {
+      google: /imgurl=([^&]+)/,
+      bing: /mediaurl=([^&]+)/,
+    };
+    const match = data.match(matchers.bing) || data.match(matchers.google);
+    if (!match) {
+      emit('drop:url', data);
+      return;
+    }
+    const [, capture] = match;
+    const decoded = decodeURIComponent(capture);
+    emit('drop:url', decoded);
+  });
+}
+
+function readImagesFromItems(items) {
+  Array.from(items)
+    .filter((item) => item.webkitGetAsEntry)
+    .forEach((item) => {
+      if (item.isDirectory) readDirectory(item);
+      if (item.kind !== 'string') return;
+      readDragAndDropFromImageSearchEngine(item);
+    });
+}
+
 function dragging(isDragging) {
   dropping.value = isDragging;
 }
 
 function getImages(event) {
-  const { files } = event.dataTransfer;
-  if (files.length > 0) {
-    Array.from(files).forEach(readFile);
-    return;
+  const { files, items } = event.dataTransfer;
+  console.log(files, items);
+  if (files.length > 0) Array.from(files).forEach(readFile);
+  else if (items.length > 0) readImagesFromItems(items);
+  else {
+    const url = event.dataTransfer.getData('text/plain');
+    if (!url) {
+      console.warn('Unable to get dropped image url', event.dataTransfer);
+      return;
+    }
+    emit('drop:url', url);
   }
-  const url = event.dataTransfer.getData('text/plain');
-  if (!url) {
-    console.warn('Unable to get dropped image url', event.dataTransfer);
-    return;
-  }
-  emit('drop:url', url);
 }
 
 function handleDrop(event) {
@@ -72,6 +106,7 @@ function handleDrop(event) {
   <div
        class="image-dropzone__wrapper"
        @drop.prevent="handleDrop"
+       @paste="handleDrop"
        @dragenter="dragging(true)"
        @dragleave="dragging(false)"
        @dragover.prevent="dragging(true)">
