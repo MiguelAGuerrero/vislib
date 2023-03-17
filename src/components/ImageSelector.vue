@@ -87,6 +87,7 @@ onMounted(() => {
               multiple
               type="file"
               class="upload-image"
+              accept="image/*"
           />
         </span>
       </span>
