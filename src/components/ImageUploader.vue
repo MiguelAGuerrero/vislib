@@ -57,7 +57,7 @@ onMounted(() => {
 
 .upload-button {
   padding: 1rem;
-  width: fit-content%;
+  width: fit-content;
   text-align: left;
 }
 
@@ -65,9 +65,4 @@ onMounted(() => {
   display: none;
 }
 
-.upload-image__label {
-  position: absolute;
-  visibility: hidden;
-  align-content: center;
-}
 </style>
