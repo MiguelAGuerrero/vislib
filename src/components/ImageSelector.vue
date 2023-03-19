@@ -1,10 +1,9 @@
 <script setup>
 
-import { onMounted, ref, watch } from 'vue';
 import ImagePreviewList from './ImageList.vue';
 import ImageDropzone from './ImageDropzone.vue';
-import useImageReader from '../composition/useImageReader';
 import ImagePasteInput from './ImagePasteInput.vue';
+import ImageUploader from './ImageUploader.vue';
 
 const props = defineProps({
   images: {
@@ -16,8 +15,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['add', 'remove', 'paste']);
-
-const fileInput = ref();
 
 function imageExists(imageUrl) {
   return imageUrl && props.images.includes(imageUrl);
@@ -46,11 +43,6 @@ function removeImage(imageUrl) {
   emitRemoveEvent([imageUrl]);
 }
 
-onMounted(() => {
-  const uploads = useImageReader(fileInput.value);
-  watch(uploads, (value) => addImages(value));
-});
-
 </script>
 
 <template>
@@ -67,16 +59,7 @@ onMounted(() => {
       <span class="actions">
         <image-paste-input @paste="addImage" class="paste-box"/>
         <span class="or-divider"> OR </span>
-        <span>
-          <label class="upload-image__label"> Upload </label>
-          <input
-              ref="fileInput"
-              multiple
-              type="file"
-              class="upload-image"
-              accept="image/*"
-          />
-        </span>
+        <ImageUploader @upload="addImages"/>
       </span>
     </div>
   </image-dropzone>
@@ -127,21 +110,4 @@ onMounted(() => {
   margin-left: var(--spacing);
 }
 
-.paste-box,
-.upload-image {
-  border-radius: 1rem;
-  border: var(--color-tertiary) solid 0.1rem;
-  background: none;
-  width: 100%;
-}
-
-.upload-image {
-  padding: 1rem;
-}
-
-.upload-image__label {
-  position: absolute;
-  visibility: hidden;
-  align-content: center;
-}
 </style>
