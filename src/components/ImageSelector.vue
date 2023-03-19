@@ -4,6 +4,7 @@ import { onMounted, ref, watch } from 'vue';
 import ImagePreviewList from './ImageList.vue';
 import ImageDropzone from './ImageDropzone.vue';
 import useImageReader from '../composition/useImageReader';
+import ImagePasteInput from './ImagePasteInput.vue';
 
 const props = defineProps({
   images: {
@@ -14,9 +15,10 @@ const props = defineProps({
   },
 });
 
-const pasteBoxStyle = ref(['.paste-box']);
-const emit = defineEmits(['add', 'remove']);
+const emit = defineEmits(['add', 'remove', 'paste']);
+
 const fileInput = ref();
+
 function imageExists(imageUrl) {
   return imageUrl && props.images.includes(imageUrl);
 }
@@ -29,28 +31,14 @@ function emitRemoveEvent(images) {
   emit('remove', images);
 }
 
-// eslint-disable-next-line no-unused-vars
 function addImage(imageUrl) {
   if (imageExists(imageUrl)) return;
   emitAddEvent([imageUrl]);
 }
 
 // eslint-disable-next-line no-unused-vars
-async function addPastedImageLink(event) {
-  event.preventDefault();
-  const { clipboardData } = event;
-  const pastedData = clipboardData.getData('text');
-  addImage(pastedData);
-}
-
-// eslint-disable-next-line no-unused-vars
 function addImages(imageUrls) {
   emitAddEvent(imageUrls.filter((imageUrl) => !imageExists(imageUrl)));
-}
-
-function handlePaste(event) {
-  pasteBoxStyle.value = ['.paste-box--active'];
-  addPastedImageLink(event);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -77,8 +65,7 @@ onMounted(() => {
       <image-preview-list :images="images" @remove:image="removeImage"></image-preview-list>
       <span class="divider" />
       <span class="actions">
-        <input class="paste-box" type="text" placeholder="Paste image link"
-               @paste="handlePaste"/>
+        <image-paste-input @paste="addImage" class="paste-box"/>
         <span class="or-divider"> OR </span>
         <span>
           <label class="upload-image__label"> Upload </label>
@@ -143,10 +130,13 @@ onMounted(() => {
 .paste-box,
 .upload-image {
   border-radius: 1rem;
-  padding: 1rem;
   border: var(--color-tertiary) solid 0.1rem;
   background: none;
   width: 100%;
+}
+
+.upload-image {
+  padding: 1rem;
 }
 
 .upload-image__label {
@@ -154,11 +144,4 @@ onMounted(() => {
   visibility: hidden;
   align-content: center;
 }
-
-.paste-box::placeholder {
-  font-size: 1rem;
-  color: var(--color-white);
-  opacity: 80%
-}
-
 </style>
