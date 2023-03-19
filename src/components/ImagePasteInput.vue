@@ -26,7 +26,7 @@ const LoadStatus = {
   },
   FAILED: {
     icon: faExclamation,
-    placeholder: 'Image failed to load',
+    placeholder: 'Failed to load image: pasted an invalid image link',
     class: 'paste-box--failure',
   },
 };
@@ -51,20 +51,14 @@ async function isValidImage(imageUrl) {
   return !!loaded;
 }
 
-function isImagePaste(clipboardData) {
-  return !!clipboardData.items;
-}
-
-async function emitPastedImage(clipboardData) {
+async function emitPastedImage(imageItem) {
   // Check if the clipboard data contains an image
-  const imageItem = Array.from(clipboardData.items).find((item) => item.type.indexOf('image') !== -1);
   const imageData = imageItem.getAsFile();
   const imageUrl = URL.createObjectURL(imageData);
   emit('paste', imageUrl);
 }
 
-async function emitPastedImageLink(clipboardData) {
-  const pastedData = clipboardData.getData('text');
+async function emitPastedImageLink(pastedData) {
   if (await isValidImage(pastedData)) {
     emit('paste', pastedData);
   } else {
@@ -77,12 +71,16 @@ async function handlePaste(event) {
   pasteStatus.value = LoadStatus.LOADING;
   const { clipboardData } = event;
   try {
-    if (isImagePaste(clipboardData)) {
-      await emitPastedImage(clipboardData);
+    const imageItem = Array.from(clipboardData.items)
+      .find((item) => item.type.indexOf('image') !== -1);
+    if (imageItem) {
+      await emitPastedImage(imageItem);
     } else {
-      await emitPastedImageLink(clipboardData);
+      const pastedData = clipboardData.getData('text');
+      await emitPastedImageLink(pastedData);
     }
   } catch (error) {
+    console.error('error on paste', error);
     pasteStatus.value = LoadStatus.FAILED;
     return;
   }
