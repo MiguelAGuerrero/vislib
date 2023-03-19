@@ -48,21 +48,25 @@ function readDirectory(item) {
   return item;
 }
 
-function readDragAndDropFromImageSearchEngine(item) {
+function readAsImageSearchEngineDrop(item) {
   item.getAsString((data) => {
+    let url = data;
     console.log('read item as string', data);
     const matchers = {
-      google: /imgurl=([^&]+)/,
-      bing: /mediaurl=([^&]+)/,
+      google: /imgurl=([^&]+)/i,
+      bing: /mediaurl=([^&]+)/i,
+      generic: /([^&#]+\.(jpg|gif|png|jpeg))/i,
     };
-    const match = data.match(matchers.bing) || data.match(matchers.google);
-    if (!match) {
-      emit('drop:url', data);
-      return;
+    let match;
+    Object.values(matchers).find((matcher) => {
+      match = data.match(matcher);
+      return match;
+    });
+    if (match) {
+      const [, capture] = match;
+      url = decodeURIComponent(capture);
     }
-    const [, capture] = match;
-    const decoded = decodeURIComponent(capture);
-    emit('drop:url', decoded);
+    emit('drop:url', url);
   });
 }
 
@@ -72,7 +76,9 @@ function readImagesFromItems(items) {
     .forEach((item) => {
       if (item.isDirectory) readDirectory(item);
       if (item.kind !== 'string') return;
-      readDragAndDropFromImageSearchEngine(item);
+      if (item.type.match('text/uri-list') || item.type.match('text/x-moz-url')) {
+        readAsImageSearchEngineDrop(item);
+      }
     });
 }
 
@@ -81,8 +87,8 @@ function dragging(isDragging) {
 }
 
 function getImages(event) {
+  if (!event.dataTransfer) return;
   const { files, items } = event.dataTransfer;
-  console.log(files, items);
   if (files.length > 0) Array.from(files).forEach(readFile);
   else if (items.length > 0) readImagesFromItems(items);
   else {
