@@ -16,12 +16,12 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:active-tab, update:tabs']);
+const emit = defineEmits(['update:activeTab', 'update:tabs']);
 function getDefaultName(tabs) {
   return `tab ${tabs.length + 1}`;
 }
 function selectTab(index) {
-  emit('update:active-tab', index);
+  emit('update:activeTab', index);
 }
 
 function removeTab(index) {
@@ -40,7 +40,7 @@ function isTabSelected(index) {
 
 function addTab() {
   emit('update:tabs', [...props.tabs, { name: getDefaultName(props.tabs), images: [] }]);
-  emit('update:active-tab', props.tabs.length);
+  emit('update:activeTab', props.tabs.length);
 }
 
 function validateName(index) {
@@ -61,7 +61,7 @@ function validateName(index) {
         role="button"
         :class="{'tab--active': isTabSelected(index)}"
         class="tab">
-        <input v-model="tab.name" :readonly="!isTabSelected(index)" @blur="validateName(index)"/>
+        <input v-model="tab.name" :disabled="!isTabSelected(index)" @blur="validateName(index)"/>
         <font-awesome-icon class='close-tab' :icon="faClose" @click="removeTab(index)" />
     </span>
     <div class="add-tab-container" @click="addTab">
