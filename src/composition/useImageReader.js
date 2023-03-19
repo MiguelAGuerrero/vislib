@@ -13,7 +13,7 @@ async function uploadImage(file) {
   });
 }
 
-export default function useImageReader(fileInput) {
+export default function useImageReader(fileInputRef) {
   const images = ref([]);
   async function readFiles(event) {
     const { files } = event.target;
@@ -23,6 +23,6 @@ export default function useImageReader(fileInput) {
     }
     images.value = await Promise.all(uploadPromises);
   }
-  fileInput.addEventListener('change', readFiles);
+  fileInputRef.value.addEventListener('change', readFiles);
   return images;
 }
