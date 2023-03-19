@@ -2,13 +2,15 @@
 
 import { ref, onBeforeMount } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faCheck, faExclamation, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck, faExclamation, faEllipsis, faPaste,
+} from '@fortawesome/free-solid-svg-icons';
 
 const emit = defineEmits(['paste']);
 
 const LoadStatus = {
   IDLE: {
-    icon: '',
+    icon: faPaste,
     placeholder: 'Paste an image URL here',
     class: 'paste-box',
   },
@@ -49,17 +51,42 @@ async function isValidImage(imageUrl) {
   return !!loaded;
 }
 
-async function addPastedImageLink(event) {
+function isImagePaste(clipboardData) {
+  return !!clipboardData.items;
+}
+
+async function emitPastedImage(clipboardData) {
+  // Check if the clipboard data contains an image
+  const imageItem = Array.from(clipboardData.items).find((item) => item.type.indexOf('image') !== -1);
+  const imageData = imageItem.getAsFile();
+  const imageUrl = URL.createObjectURL(imageData);
+  emit('paste', imageUrl);
+}
+
+async function emitPastedImageLink(clipboardData) {
+  const pastedData = clipboardData.getData('text');
+  if (await isValidImage(pastedData)) {
+    emit('paste', pastedData);
+  } else {
+    throw new Error('Invalid image link');
+  }
+}
+
+async function handlePaste(event) {
   event.preventDefault();
   pasteStatus.value = LoadStatus.LOADING;
   const { clipboardData } = event;
-  const pastedData = clipboardData.getData('text');
-  if (await isValidImage(pastedData)) {
-    pasteStatus.value = LoadStatus.SUCCESS;
-    emit('paste', pastedData);
-  } else {
+  try {
+    if (isImagePaste(clipboardData)) {
+      await emitPastedImage(clipboardData);
+    } else {
+      await emitPastedImageLink(clipboardData);
+    }
+  } catch (error) {
     pasteStatus.value = LoadStatus.FAILED;
+    return;
   }
+  pasteStatus.value = LoadStatus.SUCCESS;
 }
 
 </script>
@@ -74,7 +101,7 @@ async function addPastedImageLink(event) {
     <input :class="pasteStatus.class"
            type="text"
            :placeholder="pasteStatus.placeholder"
-           @paste="addPastedImageLink"
+           @paste="handlePaste"
            @focus="pasteStatus = LoadStatus.IDLE"
     />
   </div>
