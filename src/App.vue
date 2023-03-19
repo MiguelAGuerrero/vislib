@@ -20,9 +20,15 @@ const interval = ref(60);
 const tabs = ref([
   { name: 'tab 1', images: defaultImages },
 ]);
+
 const images = computed(() => tabs.value.reduce((accum, tab) => [...accum, ...tab.images], []));
 const selectedTab = ref(0);
-const selectedImages = computed(() => tabs.value[selectedTab.value].images || []);
+
+function getSelectedTab() {
+  return tabs.value[selectedTab.value] || tabs.value[0];
+}
+
+const selectedImages = computed(() => getSelectedTab().images || []);
 
 // eslint-disable-next-line no-unused-vars
 function saveImages() {
@@ -44,15 +50,13 @@ function start() {
   running.value = true;
 }
 
-function getSelectedTab() {
-  return tabs.value[selectedTab.value] || tabs.value[0];
-}
 function addImages(added) {
   getSelectedTab().images.push(...added);
 }
 
 function removeImages(removed) {
   const s = getSelectedTab();
+  // TODO: Make sure to revoke object URLs
   s.images = s.images.filter((image) => !removed.includes(image));
 }
 
@@ -86,7 +90,7 @@ onMounted(() => {
                   v-model:active-tab="selectedTab" />
         <image-selector
             class="image-selector"
-            :images="tabs[selectedTab].images"
+            :images="selectedImages"
             @add="addImages"
             @remove="removeImages" />
         </div>
@@ -126,8 +130,8 @@ onMounted(() => {
             </label>
           </span>
         </div>
+      </div>
       <button class='start' @click='start'>Start</button>
-    </div>
     </span>
     <span class="right-sidebar">Right sidebar</span>
     <span class="footer">Footer</span>
@@ -218,7 +222,6 @@ onMounted(() => {
 }
 
 .session-settings__body {
-  display: none;
   justify-content: space-between;
   justify-content: center;
 }
