@@ -21,7 +21,7 @@ onMounted(() => {
 <template>
   <span class="image-uploader-container">
     <FontAwesomeIcon :icon="faUpload" class="image-uploader__icon"></FontAwesomeIcon>
-    <span class="upload-button" @click="openFileDialog"> Upload Image </span>
+    <span class="upload-button" @click="openFileDialog"> Upload Images </span>
     <input
         ref="fileInput"
         multiple
@@ -38,9 +38,9 @@ onMounted(() => {
   display: flex;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
-  background-color: var(--color-white);
-  border-radius: var(--image-selector-border-radius);
-  color: var(--color-black);
+  background-color: var(--color-secondary);
+  border-radius: var(--border-radius);
+  color: var(--color-accent);
   padding: 0 1rem;
   cursor: pointer;
 }
@@ -52,7 +52,6 @@ onMounted(() => {
 .image-uploader__icon {
   width: 2rem;
   height: auto;
-  color: var(--color-black);
 }
 
 .upload-button {

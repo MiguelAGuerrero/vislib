@@ -74,11 +74,11 @@ function validateName(index) {
 
 .tabs-list {
   --tab-size: 2rem;
-  background-color: var(--color-tertiary);
+  background-color: var(--color-secondary);
   display: flex;
   min-height: var(--tab-size);
-  padding: 0.1rem 1rem;
-  gap: 0.15rem;
+  padding: 0.5rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
@@ -87,30 +87,31 @@ function validateName(index) {
 }
 
 .tabs-list > * {
-  color: var(--color-black);
+  color: var(--color-accent);
   height: var(--tab-size);
-  border-radius: var(--image-selector-border-radius);
+  border-radius: var(--border-radius);
 }
 
 .tab {
   display: flex;
-  padding: 0 0.5ch;
+  padding: 0.5ch;
+  background-color: var(--color-secondary);
 }
 
 .tab:hover, .add-tab-container:hover {
-  background: var(--color-black);
-  color: var(--color-white);
+  background: var(--color-tertiary);
+  color: var(--color-neutral);
   opacity: 80%;
 }
 
 .tab:hover > input {
-  color: var(--color-white);
+  color: var(--color-neutral);
 }
 
 .tab > input {
   width: 10ch;
   border: none;
-  color: var(--color-black);
+  color: var(--color-accent);
   position: relative;
   background: none;
 }
@@ -124,15 +125,14 @@ function validateName(index) {
   display: flex;
   place-content: center;
   place-items: center;
-  font-size: 1rem;
   cursor: pointer;
   aspect-ratio: 1/1;
   padding: 0 0.5rem;
 }
 
 .close-tab:hover {
-  background-color: var(--color-white);
-  border-radius: var(--image-selector-border-radius);
+  background-color: var(--color-tertiary);
+  border-radius: var(--border-radius);
   color: var(--color-black);
 }
 .add-tab {
@@ -141,12 +141,12 @@ function validateName(index) {
 
 .tab--active {
   opacity: 100%;
-  background-color: var(--color-black);
-  color: white;
+  background-color: var(--color-tertiary);
+  color: var(--color-primary);
 }
 
 .tab--active > input {
-  color: white;
+  color: var(--color-neutral);
 }
 
 </style>

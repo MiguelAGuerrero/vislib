@@ -5,6 +5,8 @@
 }
 
 :root {
+  --border-radius: 0.5rem;
+
   /* COLORS */
   --color-white: rgba(252, 252, 252, 0.87);
   --color-black: #242424;
@@ -17,25 +19,38 @@
   --color-vanilla: #eae2b7ff;
 
   /* Palette 2 */
-  --color-prussian-blue: #002642ff;
-  --color-claret: #840032ff;
-  --color-gamboge: #e59500ff;
-  --color-timberwolf: #e5dadaff;
-  --color-rich-black: #02040fff;
+  --black: #000000ff;
+  --color-oxford-blue: #14213dff;
+  --color-orange-web: #fca311ff;
+  --color-platinum: #e5e5e5ff;
+  --color-white: #ffffffff;
 
-  /* Palette 3*/
-  --color-oxford-blue: #011638ff;
-  --color-charcoal: #364156ff;
-  --color-silver: #cdcdcdff;
-  --color-honeydew: #dff8ebff;
-  --color-cal-poly-green: #214e34ff;
+
+  /*Palette 4*/
+  /* CSS HEX */
+  --color-seasalt: #f8f9faff;
+  --color-antiflash-white: #e9ecefff;
+  --color-french-gray: #ced4daff;
+  --color-french-gray-2: #adb5bdff;
+  --color-slate-gray: #6c757dff;
+  --color-outer-space: #495057ff;
+  --color-onyx: #343a40ff;
+  --color-eerie-black: #212529ff;
+
+  /*Palette 5*/
+  --duke-blue: #390099ff;
+  --murrey: #9e0059ff;
+  --folly: #ff0054ff;
+  --orange-pantone: #ff5400ff;
+  --amber: #ffbd00ff;
+
 
   /* SCHEME */
-  --color-primary: var(--color-oxford-blue);
-  --color-secondary: var(--color-cal-poly-green);
-  --color-tertiary: var(--color-silver);
-  --color-accent: var(--color-honeydew);
-  --color-neutral: var(--color-charcoal);
+  --color-primary: var(--color-outer-space);
+  --color-secondary: var(--color-onyx);
+  --color-tertiary: var(--color-french-gray);
+  --color-accent: var(--color-seasalt);
+  --color-neutral: var(--color-eerie-black);
 
   /* Font */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -44,7 +59,6 @@
 
   color-scheme: light dark;
   color: var(--color-white);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -95,8 +109,8 @@ h1 {
 .input, button {
   border-radius: 8px;
   border: 1px solid transparent;
-  background-color: var(--color-tertiary);
-  color: var(--color-black);
+  background-color: var(--color-accent);
+  color: var(--color-neutral);
   transition: border-color 0.25s;
 }
 

@@ -70,18 +70,18 @@ function removeImage(imageUrl) {
 .container {
   --spacing: 1rem;
   display: grid;
-  background-color: var(--color-black);
   padding: var(--spacing);
   grid-template: 1fr auto / auto;
   width: 100%;
   height: 100%;
   border-radius: inherit;
+  background-color: var(--color-primary);
 }
 
 .divider {
   width: 100%;
   height: 0.1rem;
-  background-color: var(--color-tertiary);
+  background-color: var(--color-secondary);
   border-radius: 2rem;
   margin: 1rem 0;
 }

@@ -114,18 +114,22 @@ async function handlePaste(event) {
   grid-template-columns: auto 1fr;
   align-items: center;
   overflow: hidden;
+  background-color: var(--color-secondary);
+  border-radius: var(--border-radius);
 }
 
 .paste-box > input {
   border: none;
   height: 100%;
   padding-left: 1rem;
+  border-bottom-right-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
   background-color: transparent;
-  border-bottom-right-radius: inherit;
-  border-top-right-radius: inherit;
 }
 
-.paste-box::placeholder {
+.paste-box::placeholder,
+.paste-box--success::placeholder,
+.paste-box--failure::placeholder{
   font-size: 1rem;
   color: var(--color-white);
   opacity: 80%
@@ -157,8 +161,9 @@ async function handlePaste(event) {
 }
 
 .paste-box__status-indicator {
-  color: var(--color-white);
-  height: 1.5rem;
+  color: var(--color-accent);
+  width: 2rem;
+  height: 2rem;
   transform: translateX(2px);
 }
 

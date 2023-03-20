@@ -95,14 +95,14 @@ onMounted(() => {
             @remove="removeImages" />
         </div>
       <div class='session-settings'>
+        <h1 class="session-settings__title">Settings</h1>
         <div class='session-settings__body'>
-          <span class="setting-icon"></span>
           <span class="setting">
             <label id='time-interval-label' for='time-interval'>
               {{interval}}s time interval
             </label>
           </span>
-          <svg class="setting conditional-setting">
+          <span class="setting">
             <label id='auto-progress-label' for='auto-progress'>
               {{ autoTransition ? 'Auto-transition' : 'No auto-transition' }}
               <input id='auto-progress' type='checkbox' v-model='autoTransition' v-show="false">
@@ -116,9 +116,9 @@ onMounted(() => {
                 {{ transitionDelay === 0 ? '0 Delay' : `${transitionDelay}s delay` }}
               </label>
             </span>
-          </svg>
+          </span>
           <span class="setting">
-            <label id='loop-label'>
+`            <label id='loop-label'>
               {{ loop ? 'Looping' : 'No looping'}}
               <input type='checkbox' v-model='loop' v-show='false'/>
             </label>
@@ -172,6 +172,7 @@ onMounted(() => {
   margin: 0 auto;
   border-radius: 1rem;
   min-height: 90vh;
+  gap: 3rem;
 }
 
 .right-sidebar {
@@ -189,7 +190,6 @@ onMounted(() => {
 .image-selector-container {
   display: grid;
   grid-template: auto 1fr / 1fr;
-  --image-selector-border-radius: 0.5rem;
   max-height: 80vh;
   width: 80vw;
 }
@@ -197,36 +197,29 @@ onMounted(() => {
 .image-selector {
   position: relative;
   flex-basis: 100%;
-  border-bottom-left-radius: var(--image-selector-border-radius);
-  border-bottom-right-radius: var(--image-selector-border-radius);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .image-selector__tabs {
-  border-top-left-radius: var(--image-selector-border-radius);
-  border-top-right-radius: var(--image-selector-border-radius);
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
 }
 
 /* 2. Settings */
 .session-settings {
-  display: flex;
-  color: var(--color-tertiary);
-  flex: 1;
-  padding: 1rem;
-  border-radius: 1rem;
-  flex-direction: column;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  border-radius: var(--border-radius);
   gap: 1rem;
 }
 
-.session-settings * {
-  color: var(--color-white);
-}
-
 .session-settings__body {
-  justify-content: space-between;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.setting, .conditional-setting {
+.setting {
   cursor: pointer;
   position: relative;
   background-color: var(--color-black);
