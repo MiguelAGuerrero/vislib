@@ -114,6 +114,7 @@ function validateName(index) {
   color: var(--color-accent);
   position: relative;
   background: none;
+  font-size: 1rem;
 }
 
 .close-tab {
