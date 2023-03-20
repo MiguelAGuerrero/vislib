@@ -50,6 +50,9 @@ const showOverlay = ref(true);
   --image-size: 128px;
   transition: 0.1s;
   height: calc(var(--image-size) + 5rem);
+  border-radius: var(--border-radius);
+  box-shadow: black 0 0 4px;
+  overflow: hidden;
 }
 
 .image-container:hover {
@@ -58,7 +61,6 @@ const showOverlay = ref(true);
 
 .image {
   height: 100%;
-  box-shadow: black 0 0 4px;
 }
 
 .preview-list {
