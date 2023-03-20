@@ -11,7 +11,7 @@ const emit = defineEmits(['paste']);
 const LoadStatus = {
   IDLE: {
     icon: faPaste,
-    placeholder: 'Paste an image URL here',
+    placeholder: 'Paste an image or image link here',
     class: 'paste-box',
   },
   LOADING: {
@@ -121,7 +121,6 @@ async function handlePaste(event) {
 .paste-box > input {
   border: none;
   height: 100%;
-  padding-left: 1rem;
   border-bottom-right-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
   background-color: transparent;
@@ -132,7 +131,8 @@ async function handlePaste(event) {
 .paste-box--failure::placeholder{
   font-size: 1rem;
   color: var(--color-white);
-  opacity: 80%
+  opacity: 80%;
+  text-align: center;
 }
 
 .paste-box--success,

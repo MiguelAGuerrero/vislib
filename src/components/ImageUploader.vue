@@ -37,7 +37,6 @@ onMounted(() => {
 .image-uploader-container {
   display: flex;
   grid-template-columns: 1fr 1fr;
-  justify-content: center;
   background-color: var(--color-secondary);
   border-radius: var(--border-radius);
   color: var(--color-accent);
@@ -56,8 +55,8 @@ onMounted(() => {
 
 .upload-button {
   padding: 1rem;
-  width: fit-content;
-  text-align: left;
+  width: 100%;
+  text-align: center;
 }
 
 .hidden-input {
