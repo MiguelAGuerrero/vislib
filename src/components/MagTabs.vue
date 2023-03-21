@@ -1,7 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { faClose, faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faAdd, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const props = defineProps({
   tabs: {
@@ -18,7 +18,12 @@ const props = defineProps({
 
 const emit = defineEmits(['update:activeTab', 'update:tabs']);
 function getDefaultName(tabs) {
-  return `tab ${tabs.length + 1}`;
+  const name = `tab ${tabs.length + 1}`;
+  const duplicateCount = tabs.reduce((accum, current) => accum + (current.name === name), 0);
+  if (duplicateCount) {
+    return `${name} (${duplicateCount + 1})`;
+  }
+  return name;
 }
 function selectTab(index) {
   emit('update:activeTab', index);
@@ -45,8 +50,9 @@ function addTab() {
 
 function validateName(index) {
   const tab = props.tabs[index];
-  if (tab.name.trim() !== '') return;
-  emit('update:tabs', [...props.tabs]);
+  if (tab.name.trim() === '') {
+    tab.name = getDefaultName(props.tabs);
+  }
 }
 
 </script>
@@ -61,7 +67,10 @@ function validateName(index) {
         role="button"
         :class="{'tab--active': isTabSelected(index)}"
         class="tab">
+      <font-awesome-icon :icon="faEdit" v-show="isTabSelected(index)" />
+      <div class="input-container">
         <input v-model="tab.name" :disabled="!isTabSelected(index)" @blur="validateName(index)"/>
+      </div>
         <font-awesome-icon class='close-tab' :icon="faClose" @click="removeTab(index)" />
     </span>
     <div class="add-tab-container" @click="addTab">
@@ -78,8 +87,8 @@ function validateName(index) {
   display: flex;
   min-height: var(--tab-size);
   padding: 0.5rem;
-  gap: 0.5rem;
   flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .add-tab, .tab {
@@ -94,8 +103,10 @@ function validateName(index) {
 
 .tab {
   display: flex;
-  padding: 0.5ch;
   background-color: var(--color-secondary);
+  align-items: center;
+  padding: 0 0.5rem;
+  gap: 0.5rem;
 }
 
 .tab:hover, .add-tab-container:hover {
@@ -104,17 +115,21 @@ function validateName(index) {
   opacity: 80%;
 }
 
-.tab:hover > input {
+.tab:hover input {
   color: var(--color-neutral);
 }
 
-.tab > input {
-  width: 10ch;
+.tab input {
+  min-width: 10ch;
+  width: fit-content;
   border: none;
   color: var(--color-accent);
   position: relative;
-  background: none;
   font-size: 1rem;
+}
+
+.tab:not(.tab--active) input {
+  background: none;
 }
 
 .close-tab {
@@ -128,7 +143,6 @@ function validateName(index) {
   place-items: center;
   cursor: pointer;
   aspect-ratio: 1/1;
-  padding: 0 0.5rem;
 }
 
 .close-tab:hover {
@@ -146,8 +160,14 @@ function validateName(index) {
   color: var(--color-primary);
 }
 
-.tab--active > input {
-  color: var(--color-neutral);
+.tab--active:hover input {
+  outline: var(--color-secondary) solid 2px;
+  color: var(--color-accent);
+}
+
+.tab--active input {
+  background-color: var(--color-secondary);
+  padding-left: 0.5rem;
 }
 
 </style>
