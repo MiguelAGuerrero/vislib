@@ -2,8 +2,8 @@
 import {
   computed, onMounted, onUnmounted, ref,
 } from 'vue';
-import ImageViewer from './ImageViewer.vue';
-import ImageNavigator from './ImageNavigator.vue';
+import ImageViewer from '../ImageSelector/ImageViewer.vue';
+import ImageNavigator from '../ImageSelector/ImageNavigator.vue';
 import ViewerTimer from './ViewerTimer.vue';
 
 const props = defineProps({

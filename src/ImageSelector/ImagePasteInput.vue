@@ -133,6 +133,7 @@ async function handlePaste(event) {
   color: var(--color-white);
   opacity: 80%;
   text-align: center;
+  white-space: pre-wrap;
 }
 
 .paste-box--success,

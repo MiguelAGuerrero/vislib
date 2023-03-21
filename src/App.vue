@@ -1,8 +1,9 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import SlideShow from './components/SlideShow.vue';
-import ImageSelector from './components/ImageSelector.vue';
-import MagTabs from './components/MagTabs.vue';
+import SlideShow from './PracticeSession/SlideShow.vue';
+import ImageSelector from './ImageSelector/ImageSelector.vue';
+import MagTabs from './ImageSelector/MagTabs.vue';
+import Settings from './PracticeSession/SessionSettings.vue';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
@@ -12,11 +13,14 @@ const defaultImages = ref([
 ]);
 
 const running = ref(false);
-const transitionDelay = ref(0);
 
+// Settings
+const transitionDelay = ref(0);
 const autoTransition = ref(true);
 const loop = ref(false);
 const interval = ref(60);
+const shuffle = ref(false);
+
 const tabs = ref([
   { name: 'tab 1', images: defaultImages },
 ]);
@@ -94,43 +98,7 @@ onMounted(() => {
             @add="addImages"
             @remove="removeImages" />
         </div>
-      <div class='session-settings'>
-        <h1 class="session-settings__title">Settings</h1>
-        <div class='session-settings__body'>
-          <span class="setting">
-            <label id='time-interval-label' for='time-interval'>
-              {{interval}}s time interval
-            </label>
-          </span>
-          <span class="setting">
-            <label id='auto-progress-label' for='auto-progress'>
-              {{ autoTransition ? 'Auto-transition' : 'No auto-transition' }}
-              <input id='auto-progress' type='checkbox' v-model='autoTransition' v-show="false">
-            </label>
-            <span v-if='autoTransition'>
-              >
-              <label
-                  id="transition-delay-label"
-                  class='session-settings__label'
-                  for="transition-delay">
-                {{ transitionDelay === 0 ? '0 Delay' : `${transitionDelay}s delay` }}
-              </label>
-            </span>
-          </span>
-          <span class="setting">
-`            <label id='loop-label'>
-              {{ loop ? 'Looping' : 'No looping'}}
-              <input type='checkbox' v-model='loop' v-show='false'/>
-            </label>
-          </span>
-          <span class="setting">
-            <label>
-              Shuffle
-              <input type="checkbox" v-show="false">
-            </label>
-          </span>
-        </div>
-      </div>
+      <settings/>
       <button class='start' @click='start'>Start</button>
     </span>
     <span class="right-sidebar">Right sidebar</span>
@@ -140,6 +108,7 @@ onMounted(() => {
              :images='selectedImages'
              :transition-delay='transitionDelay'
              :loop='loop'
+             :shuffle='shuffle'
              :auto='autoTransition'
              :interval='interval'
              @done='running = false'/>
@@ -204,55 +173,6 @@ onMounted(() => {
 .image-selector__tabs {
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
-}
-
-/* 2. Settings */
-.session-settings {
-  display: grid;
-  grid-template: 1fr / 1fr;
-  border-radius: var(--border-radius);
-  gap: 1rem;
-}
-
-.session-settings__body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.setting {
-  cursor: pointer;
-  position: relative;
-  background-color: var(--color-black);
-}
-
-.setting + .setting {
-  border-left: var(--color-white) solid 2px;
-  padding-left: 1rem;
-}
-
-.setting:first-child {
-  border-bottom-left-radius: 1rem;
-  border-top-left-radius: 1rem;
-}
-
-.setting-icon {
-  width: 100%;
-  height: auto;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.conditional-setting {
-  display: grid;
-  grid-template: 1fr / auto 1fr auto 1fr;
-}
-
-.session-settings__body > :not(label){
-  text-align: left;
-}
-
-.session-settings label + * {
-  justify-self: left;
 }
 
 /* 3. Actions */
