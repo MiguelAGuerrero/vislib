@@ -19,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <span class="image-uploader-container">
+  <span class="image-uploader-container input">
     <FontAwesomeIcon :icon="faUpload" class="image-uploader__icon"></FontAwesomeIcon>
     <span class="upload-button" @click="openFileDialog"> Upload Images </span>
     <input
@@ -42,10 +42,6 @@ onMounted(() => {
   color: var(--color-accent);
   padding: 0 1rem;
   cursor: pointer;
-}
-
-.image-uploader-container:hover {
-  opacity: 80%;
 }
 
 .image-uploader__icon {
