@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
-import useImageReader from '../composition/useImageReader';
+import useImageReader from '../../composition/useImageReader';
 
 const emit = defineEmits(['upload']);
 const fileInput = ref();

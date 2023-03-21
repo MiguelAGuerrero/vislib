@@ -1,9 +1,9 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import SlideShow from './PracticeSession/SlideShow.vue';
-import ImageSelector from './ImageSelector/ImageSelector.vue';
-import MagTabs from './ImageSelector/MagTabs.vue';
-import Settings from './PracticeSession/SessionSettings.vue';
+import SlideShow from './components/PracticeSession/PracticeSession.vue';
+import ImageSelector from './components/ImageSelector/ImageSelector.vue';
+import MagTabs from './components/ImageSelector/MagTabs.vue';
+import Settings from './components/PracticeSession/SessionSettings.vue';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
