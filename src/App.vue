@@ -2,8 +2,8 @@
 import { computed, onMounted, ref } from 'vue';
 import SlideShow from './components/PracticeSession/PracticeSession.vue';
 import ImageSelector from './components/ImageSelector/ImageSelector.vue';
-import MagTabs from './components/ImageSelector/MagTabs.vue';
-import Settings from './components/PracticeSession/SessionSettings.vue';
+import MagTabs from './components/MagTabs.vue';
+import SessionSettings from './components/PracticeSession/SessionSettings.vue';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
@@ -15,11 +15,13 @@ const defaultImages = ref([
 const running = ref(false);
 
 // Settings
-const transitionDelay = ref(0);
-const autoTransition = ref(true);
-const loop = ref(false);
-const interval = ref(60);
-const shuffle = ref(false);
+const settings = ref({
+  transitionDelay: 0,
+  autoTransition: true,
+  loop: false,
+  interval: 60,
+  shuffle: false,
+});
 
 const tabs = ref([
   { name: 'tab 1', images: defaultImages },
@@ -98,7 +100,7 @@ onMounted(() => {
             @add="addImages"
             @remove="removeImages" />
         </div>
-      <settings/>
+      <session-settings :settings="settings"/>
       <button class='start' @click='start'>Start</button>
     </span>
     <span class="right-sidebar">Right sidebar</span>
