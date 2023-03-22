@@ -1,4 +1,23 @@
 <script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+
+defineProps({
+  settings: {
+    type: Object,
+    required: true,
+    default() {
+      return {
+        autoTransition: true,
+        transitionDelay: false,
+        interval: 60,
+        loop: false,
+        shuffle: false,
+      };
+    },
+  },
+});
+
 </script>
 
 <template>
@@ -11,28 +30,30 @@
           <span class="setting">
             <label id='time-interval-label' for='time-interval'>
               Time interval
-              <input :value="interval">
+              <input :value="settings.interval">
             </label>
           </span>
       <span class="setting">
             <label id='auto-progress-label' for='auto-progress'>
-              {{ autoTransition ? 'Auto-transition' : 'No auto-transition' }}
-              <input id='auto-progress' type='checkbox' v-model='autoTransition' v-show="false">
+              Auto-transition
+              <input
+                     id='auto-progress'
+                     :value='settings.autoTransition'
+                     type='checkbox'>
             </label>
-            <span v-if='autoTransition'>
-              >
+      </span>
+      <span v-if='settings.autoTransition'>
               <label
                   id="transition-delay-label"
                   class='session-settings__label'
                   for="transition-delay">
-                {{ transitionDelay === 0 ? '0 Delay' : `${transitionDelay}s delay` }}
+                transition delay
               </label>
-            </span>
-          </span>
+      </span>
       <span class="setting">
            <label id='loop-label'>
-              {{ loop ? 'Looping' : 'No looping'}}
-              <input type='checkbox' v-model='loop' v-show='false'/>
+              {{ settings.loop ? 'Looping' : 'No looping'}}
+              <input type='checkbox' :value='settings.loop' v-show='false'/>
             </label>
           </span>
       <span class="setting">
