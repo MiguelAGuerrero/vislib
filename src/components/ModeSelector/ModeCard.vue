@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
 defineProps({
-  image: {
-    type: String,
-    default: '',
+  icon: {
+    type: Object,
+    default() {
+      return {};
+    },
   },
   title: {
     type: String,
@@ -21,10 +23,12 @@ const emit = defineEmits(['select']);
 <template>
   <label class="card pointer clickable">
     <input class="hidden" type="radio" hidden name="mode" @click.stop="emit('select')" />
-    <img v-if="image" class="card__image" :src="image" alt="card image"/>
-    <h2 v-if="title" class="card__title">{{ title }}</h2>
-    <slot></slot>
-    <FontAwesomeIcon class='display-on-check' :icon="faCircleCheck"></FontAwesomeIcon>
+    <FontAwesomeIcon class="card__image" :icon="icon" />
+    <div class="card__content">
+      <h2 v-if="title" class="card__title">{{ title }}</h2>
+      <slot></slot>
+      <FontAwesomeIcon class='display-on-check' :icon="faCircleCheck"></FontAwesomeIcon>
+    </div>
   </label>
 </template>
 
@@ -32,16 +36,29 @@ const emit = defineEmits(['select']);
 
 .card {
   background-color: var(--color-neutral);
-  outline: var(--color-secondary) solid 3px;
+  outline: var(--color-secondary) solid 4px;
   border-radius: var(--border-radius);
   padding: 2rem;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template: 1fr 1fr / 1fr;
   position: relative;
+  gap: 1rem;
+  color: var(--color-tertiary);
 }
 
 .card__image {
-  object-fit: contain;
+  max-width: 10rem;
+  height: auto;
+  place-self: center;
+  color: var(--color-tertiary);
+}
+
+.card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .hidden {
@@ -57,9 +74,10 @@ const emit = defineEmits(['select']);
 .display-on-check {
   visibility: hidden;
   justify-self: center;
+  height: 2rem;
 }
 
-input[type=radio]:checked ~ .display-on-check {
+input[type=radio]:checked ~ .card__content > .display-on-check {
   visibility: visible;
 }
 

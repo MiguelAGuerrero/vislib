@@ -1,4 +1,5 @@
 <script setup>
+import { faStopwatch, faBookOpen, faGears } from '@fortawesome/free-solid-svg-icons';
 import ModeCard from './ModeCard.vue';
 
 const emit = defineEmits(['update:modelValue']);
@@ -22,25 +23,29 @@ const modes = [
   {
     name: 'Sketch',
     description: 'Quick 1-minute intervals. Good for practicing gestures drawings or quick sketches',
+    icon: faStopwatch,
   },
   {
     name: 'Study',
     description: 'Move at your own pace.',
+    icon: faBookOpen,
   },
   {
     name: 'Custom',
     description: 'Define your own settings',
+    icon: faGears,
   },
 ];
 
 </script>
 
 <template>
-  <h1>Choose a mode</h1>
+  <h2 class="prompt">Choose a mode</h2>
   <div class="flex small-gap even-grow">
     <mode-card
         v-for="mode in modes"
         :key="mode.name"
+        :icon="mode.icon"
         :title="mode.name"
         @select="updateModel(mode.name.toLowerCase())"
     >
@@ -50,5 +55,7 @@ const modes = [
 </template>
 
 <style scoped>
-
+.prompt {
+  color: var(--color-tertiary);
+}
 </style>
