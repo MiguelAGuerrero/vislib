@@ -122,17 +122,22 @@ h4 {font-size: 1.563rem;}
 
 h5 {font-size: 1.25rem;}
 
-small, .text_small {font-size: 0.8rem;}
+small, .small-text {font-size: 0.8rem;}
 /* Heading scales - end */
+
+
+.input, button, .clickable {
+  border: 1px solid transparent;
+  transition: border-color 0.25s;
+}
 
 .input, button {
   border-radius: 8px;
-  border: 1px solid transparent;
   background-color: var(--color-accent);
   color: var(--color-neutral);
-  transition: border-color 0.25s;
   font-size: 1rem;
 }
+
 
 button {
   cursor: pointer;
@@ -142,15 +147,17 @@ button {
   font-family: inherit;
 }
 
-.input:hover, button:hover {
+.input:hover, button:hover, .clickable:hover {
   border-color: var(--color-accent);
 }
 
+.clickable:focus,
 .input:focus,
 .input:focus-visible
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto var(--color-accent);
+  outline-offset: 2px;
 }
 
 #app {
@@ -174,4 +181,34 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Utility Classes */
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+.two-column {
+  grid-template-columns: 1fr 1fr;
+}
+
+.small-gap {
+  gap: 1rem;
+}
+
+.centered {
+  justify-items: center;
+  align-items: center;
+}
+
+.even-grow > * {
+  flex-basis: 100%;
+}
+
+.pointer:hover {
+  cursor: pointer;
 }

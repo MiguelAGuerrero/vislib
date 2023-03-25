@@ -1,9 +1,14 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+
+// Components
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import SlideShow from './components/PracticeSession/PracticeSession.vue';
 import ImageSelector from './components/ImageSelector/ImageSelector.vue';
 import MagTabs from './components/MagTabs.vue';
 import SessionSettings from './components/PracticeSession/SessionSettings.vue';
+import ModeSelector from './components/ModeSelector/ModeSelector.vue';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
@@ -15,8 +20,8 @@ const defaultImages = ref([
 const running = ref(false);
 
 // Settings
-const settings = ref({
-  transitionDelay: 0,
+const customSettings = ref({
+  transitionDelay: 5,
   autoTransition: true,
   loop: false,
   interval: 60,
@@ -35,6 +40,43 @@ function getSelectedTab() {
 }
 
 const selectedImages = computed(() => getSelectedTab().images || []);
+
+// An enum of the different modes
+const modes = {
+  sketch: 'sketch',
+  study: 'study',
+  custom: 'custom',
+};
+
+// An object mapping the mode to the component to use to an object representing settings
+const modeSettings = {
+  [modes.sketch]: {
+    settings: {
+      transitionDelay: 5,
+      autoTransition: true,
+      loop: false,
+      interval: 60,
+      shuffle: false,
+    },
+  },
+  [modes.study]: {
+    settings: {
+      transitionDelay: 10,
+      autoTransition: true,
+      loop: false,
+      interval: 60 * 5,
+      shuffle: false,
+    },
+  },
+  [modes.custom]: {
+    settings: customSettings,
+  },
+};
+
+const selectedMode = ref('sketch');
+const selectedModeSettings = computed(
+  () => modeSettings[selectedMode.value.toLowerCase()].settings,
+);
 
 // eslint-disable-next-line no-unused-vars
 function saveImages() {
@@ -80,13 +122,16 @@ onMounted(() => {
   if (!storedData || storedData.length === 0) return;
   selectTab(0);
   setImages(storedData);
+  window.addEventListener('click', () => {
+    console.log('click');
+  });
 });
 
 </script>
 
 <template>
   <div class='app-container'>
-    <span class="header">Header</span>
+    <span class="header">My Drawing Session</span>
     <span class="left-sidebar">Left sidebar</span>
     <span class="main-content">
       <div class="image-selector-container">
@@ -100,19 +145,25 @@ onMounted(() => {
             @add="addImages"
             @remove="removeImages" />
         </div>
-      <session-settings :settings="settings"/>
-      <button class='start' @click='start'>Start</button>
+      <div class="setting-options">
+        <mode-selector v-model="selectedMode" />
+      </div>
+      <session-settings :settings="customSettings" v-show="selectedMode === modes.custom"/>
+      <span class="start-button">
+        <FontAwesomeIcon class='start-button__icon' :icon="faPlay"></FontAwesomeIcon>
+        <button class='start' @click='start'>Start</button>
+      </span>
     </span>
     <span class="right-sidebar">Right sidebar</span>
     <span class="footer">Footer</span>
   </div>
   <SlideShow v-if='running'
              :images='selectedImages'
-             :transition-delay='transitionDelay'
-             :loop='loop'
-             :shuffle='shuffle'
-             :auto='autoTransition'
-             :interval='interval'
+             :transition-delay='selectedModeSettings.transitionDelay'
+             :loop='selectedModeSettings.loop'
+             :shuffle='selectedModeSettings.shuffle'
+             :auto='selectedModeSettings.autoTransition'
+             :interval='selectedModeSettings.interval'
              @done='running = false'/>
 </template>
 
@@ -126,7 +177,7 @@ onMounted(() => {
 .header {
   display: none;
   grid-column: 1 / 4;
-  background-color: var(--color-tertiary);
+  background-color: var(--color-secondary);
   padding: 1rem;
 }
 
@@ -138,12 +189,12 @@ onMounted(() => {
 .main-content {
   grid-column: 2 / 3;
   display: grid;
-  grid-template: 1fr auto / 1fr;
-  align-content: center;
+  grid-template: 1fr auto auto / 1fr;
   margin: 0 auto;
-  border-radius: 1rem;
-  min-height: 90vh;
+  min-height: 50dvh;
   gap: 3rem;
+  max-width: 1760px;
+  width: 80vw;
 }
 
 .right-sidebar {
@@ -162,11 +213,11 @@ onMounted(() => {
   display: grid;
   grid-template: auto 1fr / 1fr;
   max-height: 80vh;
-  width: 80vw;
+  width: 100%;
+  justify-self: center;
 }
 
 .image-selector {
-  position: relative;
   flex-basis: 100%;
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
@@ -178,9 +229,21 @@ onMounted(() => {
 }
 
 /* 3. Actions */
-.start {
+.start-button {
+  display: grid;
+  grid-template-columns: auto 1fr;
   margin-top: auto;
-  color: var(--color-black);
+  color: var(--color-accent);
+  align-items: center;
+  background-color: var(--color-accent);
+  border-radius: var(--border-radius);
 }
+
+.start-button__icon {
+  height: 2rem;
+  color: var(--color-secondary);
+  padding-left: 1rem;
+}
+/* End Components */
 
 </style>

@@ -17,12 +17,8 @@ const props = defineProps({
   },
 });
 
-function updateModelValue(value) {
-  emit('update:modelValue', value);
-}
-
 function handleClickEvent(event) {
-  updateModelValue(event.target.value);
+  emit('update:modelValue', event.target.value);
   console.log(props.modelValue, event.target.value, props.modelValue === event.target.value);
 }
 
