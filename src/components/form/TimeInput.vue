@@ -1,12 +1,43 @@
 <script setup>
+import { ref } from 'vue';
+
+const minutesInput = ref();
+const secondsInput = ref();
+
 const placeholder = '00';
 
-function autoFocusNextInputOnMaxLength(event) {
-  const input = event.target;
-  if (input.value.length === 2) {
-    input.blur();
-    document.getElementById('seconds').querySelector('input').focus();
+defineProps({
+  modelValue: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+function onBlur() {
+  const minutesBlurred = minutesInput.value !== document.activeElement;
+  const secondsBlurred = secondsInput.value !== document.activeElement;
+  if (minutesBlurred && secondsBlurred) {
+    const minutes = minutesInput.value.value;
+    const seconds = secondsInput.value.value;
+    const SEC_IN_MIN = 60;
+    const totalSeconds = Number(minutes) * SEC_IN_MIN + Number(seconds);
+    emit('update:modelValue', totalSeconds);
   }
+}
+
+function autoFocusNextInputOnMaxLength(currentInput, nextInput, maxLength) {
+  if (currentInput.value.length === maxLength) {
+    currentInput.blur();
+    nextInput.focus();
+  }
+}
+
+function handleMinuteInput(event) {
+  const input = event.target;
+  const MAX_INPUT_LENGTH = 2;
+  autoFocusNextInputOnMaxLength(input, secondsInput.value, MAX_INPUT_LENGTH);
 }
 
 function clearInput(event) {
@@ -19,25 +50,30 @@ function clearInput(event) {
 <template>
   <div class="time-input">
     <span id="minutes" class="time-part">
-      <input name="minutes"
-             min="0"
-             max="59"
-             maxlength="2"
-             :placeholder="placeholder"
-              @focus="clearInput"
-             @input="autoFocusNextInputOnMaxLength"
+      <input
+          ref="minutesInput"
+          name="minutes"
+          min="0"
+          max="59"
+          maxlength="2"
+          :placeholder="placeholder"
+          @focus="clearInput"
+          @input="handleMinuteInput"
+          @blur="onBlur"
       />
       <label class="small-text" for="minutes">m</label>
     </span>
     <div class="delimiter">:</div>
     <span id="seconds" class="time-part">
       <input
+          ref="secondsInput"
           name="seconds"
           min="0"
           max="59"
           maxlength="2"
           :placeholder="placeholder"
           @focus="clearInput"
+          @blur="onBlur"
       />
       <label class="small-text" for="seconds">s</label>
     </span>
@@ -49,7 +85,6 @@ function clearInput(event) {
 .time-input {
   display: flex;
   border: var(--color-tertiary) solid 1px;
-  width: fit-content;
   padding: 0 0.5rem;
 }
 
