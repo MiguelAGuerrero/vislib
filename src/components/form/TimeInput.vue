@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 const minutesInput = ref();
 const secondsInput = ref();
-
+const previousInputValue = ref();
 const placeholder = '00';
 
 defineProps({
@@ -14,23 +14,23 @@ defineProps({
 });
 
 function sanitizeInput(input) {
-  const sanitized = input.replace(/\D/g, '');
-  return sanitized;
+  return input.replace(/\D/g, '');
 }
 
 const emit = defineEmits(['update:modelValue']);
 
 function updateModelValue() {
-  const minutes = sanitizeInput(minutesInput.value.value);
-  const seconds = sanitizeInput(secondsInput.value.value);
+  const minutes = minutesInput.value.value;
+  const seconds = secondsInput.value.value;
   const SEC_IN_MIN = 60;
   const totalSeconds = Number(minutes) * SEC_IN_MIN + Number(seconds);
+  console.log('update model', totalSeconds);
   emit('update:modelValue', totalSeconds);
 }
 
-function correctInput(event) {
+function correctInputValue(event) {
   const input = event.target;
-  const sanitized = sanitizeInput(input.value);
+  const sanitized = sanitizeInput(input.value).padStart(2, '0');
   input.value = sanitized;
 }
 
@@ -42,14 +42,23 @@ function updateModelOnCompleteBlur() {
   }
 }
 
-function onBlur(event) {
-  correctInput(event);
+function restoreInputValue(event) {
+  const input = event.target;
+  input.value = previousInputValue.value;
+}
+
+function processInput(event) {
+  const { target } = event;
+  if (target.value === '') {
+    restoreInputValue(event);
+  } else {
+    correctInputValue(event);
+  }
   updateModelOnCompleteBlur();
 }
 
 function autoFocusNextInputOnMaxLength(currentInput, nextInput, maxLength) {
   if (currentInput.value.length !== maxLength) return;
-  if (nextInput.value.length !== 0) return;
   currentInput.blur();
   nextInput.focus();
 }
@@ -68,6 +77,12 @@ function clearInput(event) {
   input.value = '';
 }
 
+function saveValueAndClear(event) {
+  const input = event.target;
+  previousInputValue.value = input.value;
+  clearInput(event);
+}
+
 </script>
 
 <template>
@@ -80,9 +95,9 @@ function clearInput(event) {
           max="59"
           maxlength="2"
           :placeholder="placeholder"
-          @click="clearInput"
+          @click="saveValueAndClear"
           @input="handleMinuteInput"
-          @blur="onBlur"
+          @blur="processInput"
       />
       <label class="small-text" for="minutes">m</label>
     </span>
@@ -95,8 +110,8 @@ function clearInput(event) {
           max="59"
           maxlength="2"
           :placeholder="placeholder"
-          @click="clearInput"
-          @blur="onBlur"
+          @click="saveValueAndClear"
+          @blur="processInput"
       />
       <label class="small-text" for="seconds">s</label>
     </span>
