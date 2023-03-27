@@ -49,6 +49,7 @@ function onBlur(event) {
 
 function autoFocusNextInputOnMaxLength(currentInput, nextInput, maxLength) {
   if (currentInput.value.length !== maxLength) return;
+  if (nextInput.value.length !== 0) return;
   currentInput.blur();
   nextInput.focus();
 }
@@ -79,7 +80,7 @@ function clearInput(event) {
           max="59"
           maxlength="2"
           :placeholder="placeholder"
-          @focus="clearInput"
+          @click="clearInput"
           @input="handleMinuteInput"
           @blur="onBlur"
       />
@@ -94,7 +95,7 @@ function clearInput(event) {
           max="59"
           maxlength="2"
           :placeholder="placeholder"
-          @focus="clearInput"
+          @click="clearInput"
           @blur="onBlur"
       />
       <label class="small-text" for="seconds">s</label>
