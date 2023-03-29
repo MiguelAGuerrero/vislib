@@ -30,12 +30,12 @@ function selectTab(index) {
 }
 
 function removeTab(index) {
+  console.log(props.tabs.length, index, props.activeTab);
   if (props.tabs.length === 1) {
     emit('update:tabs', [{ name: getDefaultName([]), images: [] }]);
     return;
   }
-  if (props.tabs.length === 2) selectTab(0);
-  else if (index === props.activeTab) selectTab(index - 1);
+  if (props.tabs.length === 2 || index === props.activeTab) selectTab(index - 1);
   emit('update:tabs', props.tabs.filter((tab, i) => i !== index));
 }
 
@@ -71,7 +71,7 @@ function validateName(index) {
       <div class="input-container">
         <input v-model="tab.name" :disabled="!isTabSelected(index)" @blur="validateName(index)"/>
       </div>
-        <font-awesome-icon class='close-tab' :icon="faClose" @click="removeTab(index)" />
+        <font-awesome-icon class='close-tab' :icon="faClose" @click.stop="removeTab(index)" />
     </span>
     <div class="add-tab-container" @click="addTab">
       <font-awesome-icon class='add-tab' :icon="faAdd" />
