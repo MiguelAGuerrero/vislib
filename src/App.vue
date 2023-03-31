@@ -4,11 +4,11 @@ import { computed, onMounted, ref } from 'vue';
 // Components
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import SlideShow from './components/PracticeSession/PracticeSession.vue';
 import ImageSelector from './components/ImageSelector/ImageSelector.vue';
-import MagTabs from './components/MagTabs.vue';
-import SessionSettings from './components/PracticeSession/SessionSettings.vue';
+import MagTabs from './components/ImageSelector/MagTabs.vue';
+import SessionSettings from './components/SessionSettings.vue';
 import ModeSelector from './components/ModeSelector/ModeSelector.vue';
+import PracticeSession from './components/PracticeSession/PracticeSession.vue';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
@@ -69,7 +69,7 @@ const modeSettings = {
     },
   },
   [modes.custom]: {
-    settings: customSettings,
+    settings: ref(customSettings),
   },
 };
 
@@ -134,16 +134,17 @@ onMounted(() => {
     <span class="header">My Drawing Session</span>
     <span class="left-sidebar">Left sidebar</span>
     <span class="main-content">
-      <div class="image-selector-container">
-        <mag-tabs :tabs="tabs"
-                  class="image-selector__tabs"
-                  v-model:tabs="tabs"
-                  v-model:active-tab="selectedTab" />
-        <image-selector
-            class="image-selector"
-            :images="selectedImages"
-            @add="addImages"
-            @remove="removeImages" />
+      <template v-if="!running">
+        <div class="image-selector-container">
+          <mag-tabs :tabs="tabs"
+                    class="image-selector__tabs"
+                    v-model:tabs="tabs"
+                    v-model:active-tab="selectedTab" />
+          <image-selector
+              class="image-selector"
+              :images="selectedImages"
+              @add="addImages"
+              @remove="removeImages" />
         </div>
       <div class="setting-options">
         <mode-selector v-model="selectedMode" />
@@ -153,18 +154,21 @@ onMounted(() => {
         <FontAwesomeIcon class='start-button__icon' :icon="faPlay"></FontAwesomeIcon>
         <button class='start' @click='start'>Start</button>
       </span>
+      </template>
+
+      <practice-session v-if='running'
+                        :images='selectedImages'
+                        :transition-delay='selectedModeSettings.transitionDelay'
+                        :loop='selectedModeSettings.loop'
+                        :shuffle='selectedModeSettings.shuffle'
+                        :auto='selectedModeSettings.autoTransition'
+                        :interval='selectedModeSettings.interval'
+                        @done='running = false'/>
+
     </span>
     <span class="right-sidebar">Right sidebar</span>
     <span class="footer">Footer</span>
   </div>
-  <SlideShow v-if='running'
-             :images='selectedImages'
-             :transition-delay='selectedModeSettings.transitionDelay'
-             :loop='selectedModeSettings.loop'
-             :shuffle='selectedModeSettings.shuffle'
-             :auto='selectedModeSettings.autoTransition'
-             :interval='selectedModeSettings.interval'
-             @done='running = false'/>
 </template>
 
 <style scoped>
@@ -193,8 +197,9 @@ onMounted(() => {
   margin: 0 auto;
   min-height: 50dvh;
   gap: 3rem;
-  max-width: 1760px;
+  max-width: 1280px;
   width: 80vw;
+  color: var(--color-tertiary);
 }
 
 .right-sidebar {
@@ -212,7 +217,7 @@ onMounted(() => {
 .image-selector-container {
   display: grid;
   grid-template: auto 1fr / 1fr;
-  max-height: 80vh;
+  min-height: 50vh;
   width: 100%;
   justify-self: center;
 }
