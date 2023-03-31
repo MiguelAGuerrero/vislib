@@ -216,10 +216,8 @@ onMounted(() => {
 /* 1. Image Selector */
 .image-selector-container {
   display: grid;
-  grid-template: auto 1fr / 1fr;
-  min-height: 50vh;
+  grid-template: auto 50vh / 1fr;
   width: 100%;
-  justify-self: center;
 }
 
 .image-selector {
