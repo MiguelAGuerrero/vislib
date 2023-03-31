@@ -67,7 +67,10 @@ function validateName(index) {
         :class="{'tab--active': isTabSelected(index)}"
         class="tab">
       <font-awesome-icon :icon="faEdit" v-show="isTabSelected(index)" />
-      <input v-model="tab.name" :disabled="!isTabSelected(index)" @blur="validateName(index)"/>
+      <input v-if="isTabSelected(index)" v-model="tab.name"
+             @blur="validateName(index)"
+             @click="selectTab(index)"/>
+      <span v-else>{{ tab.name }}</span>
       <font-awesome-icon class='close-tab' :icon="faClose" @click.stop="removeTab(index)" />
     </span>
     <div class="add-tab-container" @click="addTab">
