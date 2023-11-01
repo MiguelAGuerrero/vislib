@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import { ref } from 'vue';
 
 const minutesInput = ref();
 const secondsInput = ref();
@@ -13,7 +13,7 @@ defineProps({
   },
 });
 
-function sanitizeInput(input) {
+function cleanInput(input) {
   return input.replace(/\D/g, '');
 }
 
@@ -29,7 +29,7 @@ function updateModelValue() {
 
 function correctInputValue(event) {
   const input = event.target;
-  input.value = sanitizeInput(input.value).padStart(2, '0');
+  input.value = cleanInput(input.value).padStart(2, '0');
 }
 
 function updateModelOnCompleteBlur() {
@@ -63,7 +63,7 @@ function autoFocusNextInputOnMaxLength(currentInput, nextInput, maxLength) {
 
 function handleMinuteInput(event) {
   const input = event.target;
-  const sanitized = sanitizeInput(input.value);
+  const sanitized = cleanInput(input.value);
   if (sanitized === input.value) {
     const MAX_INPUT_LENGTH = 2;
     autoFocusNextInputOnMaxLength(input, secondsInput.value, MAX_INPUT_LENGTH);
