@@ -19,5 +19,5 @@ Figured I make this app to fill in the gap for web.
 
 ### Nice to haves
 1. Support a simple drawing interface to allow users to draw from mobile/tablet.
-2. A "marketplace" for photos, like the other sites. Maybe at most a directory
+2. A "marketplace" for photos, like the other sites. At least a directory to other sites.
 3. Uploading sketches and playing them back to see improvement over time.
