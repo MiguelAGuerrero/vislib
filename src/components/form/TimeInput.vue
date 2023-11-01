@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 
 const minutesInput = ref();
 const secondsInput = ref();
@@ -24,14 +24,12 @@ function updateModelValue() {
   const seconds = secondsInput.value.value;
   const SEC_IN_MIN = 60;
   const totalSeconds = Number(minutes) * SEC_IN_MIN + Number(seconds);
-  console.log('update model', totalSeconds);
   emit('update:modelValue', totalSeconds);
 }
 
 function correctInputValue(event) {
   const input = event.target;
-  const sanitized = sanitizeInput(input.value).padStart(2, '0');
-  input.value = sanitized;
+  input.value = sanitizeInput(input.value).padStart(2, '0');
 }
 
 function updateModelOnCompleteBlur() {
@@ -147,7 +145,7 @@ label {
   align-self: end;
   padding: 0;
   margin: 0;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 </style>

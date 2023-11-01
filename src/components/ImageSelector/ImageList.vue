@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import ImageViewer from './ImageViewer.vue';
+import ImageViewer from '../ImageViewer.vue';
 import MagOverlay from './MagOverlay.vue';
 
 defineProps({
@@ -27,7 +27,7 @@ const showOverlay = ref(true);
         v-for="(img) of images"
         :key="img">
       <ImageViewer
-          class="image"
+          class="h-full"
           draggable="false"
           :src="img"
           @click="emit('click:image', img)">
@@ -47,9 +47,8 @@ const showOverlay = ref(true);
 <style scoped>
 
 .image-container {
-  --image-size: 128px;
+  max-height: 128px;
   transition: 0.1s;
-  height: calc(var(--image-size) + 5rem);
   border-radius: var(--border-radius);
   box-shadow: black 0 0 4px;
   overflow: hidden;
@@ -59,18 +58,24 @@ const showOverlay = ref(true);
   transform: scale(0.95);
 }
 
-.image {
-  height: 100%;
-}
-
 .preview-list {
   display: flex;
   overflow: auto;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
+  gap: 0.25rem;
+}
+
+@media(max-width: 768px) {
+  .preview-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .image-container {
+    aspect-ratio: 1/1;
+    height: 1fr;
+  }
 }
 
 .overlay {

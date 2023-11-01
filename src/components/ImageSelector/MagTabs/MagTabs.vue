@@ -1,7 +1,12 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { faClose, faAdd, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+import { faClose, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+import { onMounted, ref, watch } from 'vue';
+import { useEventListener } from '@vueuse/core';
+import AddTabButton from './AddTabButton.vue';
+import TabScroller from './TabScroller.vue';
 
 const props = defineProps({
   tabs: {
@@ -17,6 +22,30 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:activeTab', 'update:tabs']);
+const isOverflowing = ref(false);
+
+function scrollTabList(amount) {
+  const tabsList = document.querySelector('.tabs-list');
+  tabsList.scrollBy({
+    left: amount,
+    behavior: 'smooth',
+  });
+}
+
+function checkOverflow() {
+  const tabsList = document.querySelector('.tabs-list');
+  isOverflowing.value = tabsList.scrollWidth > tabsList.clientWidth;
+}
+
+function watchTabs() {
+  watch(() => props.tabs, checkOverflow);
+}
+
+useEventListener('resize', checkOverflow);
+onMounted(() => {
+  watchTabs();
+});
+
 function getDefaultName(tabs) {
   const name = `tab ${tabs.length + 1}`;
   const duplicateCount = tabs.reduce((accum, current) => accum + (current.name === name), 0);
@@ -57,59 +86,64 @@ function validateName(index) {
 </script>
 
 <template>
-  <div class="tabs-list">
-    <span
-        :key='index'
-        @click="selectTab(index)"
-        v-for='(tab, index) of tabs'
-        tabindex="0"
-        role="button"
-        :class="{'tab--active': isTabSelected(index)}"
-        class="tab">
-      <font-awesome-icon :icon="faEdit" v-show="isTabSelected(index)" />
-      <input v-if="isTabSelected(index)" v-model="tab.name"
-             @blur="validateName(index)"
-             @click="selectTab(index)"/>
-      <span v-else>{{ tab.name }}</span>
-      <font-awesome-icon class='close-tab' :icon="faClose" @click.stop="removeTab(index)" />
-    </span>
-    <div class="add-tab-container" @click="addTab">
-      <font-awesome-icon class='add-tab' :icon="faAdd" />
+  <div class="tabs-list-container" @resize="checkOverflow">
+    <TabScroller direction="left" v-show="isOverflowing" @click="scrollTabList" />
+    <div class="tabs-list">
+      <span
+          v-for='(tab, index) of tabs'
+          tabindex="0"
+          class="tab hover"
+          :key='index'
+          :class="{'tab--active': isTabSelected(index)}"
+          @click="selectTab(index)"
+      >
+        <FontAwesomeIcon :icon="faEdit" v-show="isTabSelected(index)" />
+        <input v-if="isTabSelected(index)" v-model="tab.name"
+               @blur="validateName(index)"
+               @click="selectTab(index)"/>
+        <span v-else>{{ tab.name }}</span>
+        <FontAwesomeIcon class='close-tab' :icon="faClose" @click.stop="removeTab(index)" />
+      </span>
+      <AddTabButton @click="addTab" v-show="!isOverflowing"/>
     </div>
+    <AddTabButton @click="addTab" v-show="isOverflowing" />
+    <TabScroller direction="right" v-show='isOverflowing' @click="scrollTabList"/>
   </div>
 </template>
 
 <style scoped>
 
-.tabs-list {
-  --tab-size: 2rem;
-  background-color: var(--color-secondary);
-  display: flex;
-  min-height: var(--tab-size);
-  padding: 0.5rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.tabs-list-container {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  border: var(--color-secondary) 1px solid;
 }
 
-.add-tab, .tab {
-  height: var(--tab-size);
+.tabs-list {
+  --tab-size: 2rem;
+  display: flex;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  max-width: 100%;
+  overflow: auto;
 }
 
 .tabs-list > * {
   color: var(--color-accent);
-  height: var(--tab-size);
   border-radius: var(--border-radius);
 }
 
 .tab {
   display: flex;
-  background-color: var(--color-secondary);
   align-items: center;
-  padding: 0 0.5rem;
+  padding: 0.5rem 0.5rem;
   gap: 0.5rem;
+  max-width: 25rem;
+  transition-property: background-color, color, opacity;
+  transition-duration: 0.1s;
 }
 
-.tab:hover, .add-tab-container:hover {
+.hover:hover {
   background: var(--color-tertiary);
   color: var(--color-neutral);
   opacity: 80%;
@@ -120,8 +154,6 @@ function validateName(index) {
 }
 
 .tab input {
-  min-width: 10ch;
-  width: fit-content;
   border: none;
   color: var(--color-accent);
   position: relative;
@@ -137,7 +169,7 @@ function validateName(index) {
   background: transparent;
 }
 
-.add-tab-container, .close-tab {
+.close-tab {
   display: flex;
   place-content: center;
   place-items: center;
@@ -149,9 +181,6 @@ function validateName(index) {
   background-color: var(--color-tertiary);
   border-radius: var(--border-radius);
   color: var(--color-black);
-}
-.add-tab {
-  height: 1rem;
 }
 
 .tab--active {

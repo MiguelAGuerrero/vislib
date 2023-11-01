@@ -12,7 +12,7 @@
       <p class="mode-card-description">{{ mode.description }}</p>
       <div class="mode-card-check">
         <font-awesome-icon :icon="faCheckCircle"
-                           :style='{visibility: selectedMode !== mode ? "hidden" : "visible"}'/>
+                           :style='showCheck(mode)'/>
       </div>
     </div>
   </div>
@@ -24,6 +24,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faStopwatch, faBookOpen, faGears, faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
+
+const props = defineProps({
+  modelValue: {
+    type: String,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
 
 const modes = ref([
   {
@@ -43,11 +52,17 @@ const modes = ref([
   },
 ]);
 
-const selectedMode = ref(null);
+const selectedMode = ref(props.modelValue);
 
 const handleCardClick = (mode) => {
   selectedMode.value = mode;
+  emit('update:modelValue', mode.name.toLowerCase());
 };
+
+const showCheck = (mode) => ({
+  visibility: mode.name.toLowerCase() === props.modelValue ? 'visible' : 'hidden',
+});
+
 </script>
 
 <style scoped>
@@ -60,15 +75,22 @@ const handleCardClick = (mode) => {
   gap: 2rem;
 }
 
+@media (max-width: 768px) {
+  .mode-selection {
+    flex-direction: column;
+    height: min-content;
+  }
+}
+
 .mode-card {
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   padding: 1rem;
   border: 0.063rem solid #ccc;
   border-radius: 0.25rem;
   cursor: pointer;
   transition: box-shadow 0.3s ease-in-out;
-  aspect-ratio: 3/4;
 }
 
 .mode-card.selected {

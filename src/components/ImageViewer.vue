@@ -56,4 +56,10 @@ img {
   height: 100%;
 }
 
+@media (max-width: 768px) {
+  img {
+    object-fit: cover;
+  }
+}
+
 </style>

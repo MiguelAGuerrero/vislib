@@ -59,4 +59,10 @@ onMounted(() => {
   display: none;
 }
 
+@media (max-width: 768px) {
+  .image-uploader-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>

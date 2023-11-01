@@ -80,7 +80,6 @@ async function handlePaste(event) {
       await emitPastedImageLink(pastedData);
     }
   } catch (error) {
-    console.error('error on paste', error);
     pasteStatus.value = LoadStatus.FAILED;
     return;
   }

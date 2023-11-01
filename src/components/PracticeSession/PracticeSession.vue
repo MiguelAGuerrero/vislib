@@ -2,8 +2,8 @@
 import {
   computed, onMounted, onUnmounted, ref,
 } from 'vue';
-import ImageViewer from '../ImageSelector/ImageViewer.vue';
-import ImageNavigator from '../ImageSelector/ImageNavigator.vue';
+import ImageViewer from '../ImageViewer.vue';
+import ImageNavigator from './ImageNavigator.vue';
 import ViewerTimer from './ViewerTimer.vue';
 
 const props = defineProps({
@@ -58,18 +58,18 @@ const selectedImage = computed(() => {
   return props.images[wrappedImageIndex.value];
 });
 
-function endReached(i) {
+function hasReachedEnd(i) {
   return !props.loop && (i === props.images.length || i < 0);
 }
 
-function finish() {
+function endSession() {
   transitioning.value = false;
   emit('done');
 }
 
 function changeImage(offset, skipped) {
-  if (endReached(index.value + offset)) {
-    finish();
+  if (hasReachedEnd(index.value + offset)) {
+    endSession();
     return;
   }
   function changeImageHelper() {
@@ -136,19 +136,16 @@ onUnmounted(() => {
                    @done="nextImage" :reset='resetTimer'/>
       <ViewerTimer v-else :seconds='transitionDelay' :color="'red'" />
     </div>
-    <button @click="finish">Finish</button>
+    <button @click="endSession">Finish</button>
   </div>
 </template>
 
 <style scoped>
-
 .slide-show {
   display: grid;
   position: relative;
-  grid-template-rows: auto 1fr auto;
   grid-template-columns: 1fr;
-  max-height: 95vh;
-  height: 100%;
+  max-height: 100vh;
   gap: 1rem;
 }
 

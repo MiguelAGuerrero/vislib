@@ -5,7 +5,7 @@ import { computed, onMounted, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import ImageSelector from './components/ImageSelector/ImageSelector.vue';
-import MagTabs from './components/ImageSelector/MagTabs.vue';
+import MagTabs from './components/ImageSelector/MagTabs/MagTabs.vue';
 import SessionSettings from './components/SessionSettings.vue';
 import ModeSelector from './components/ModeSelector/ModeSelector.vue';
 import PracticeSession from './components/PracticeSession/PracticeSession.vue';
@@ -122,9 +122,6 @@ onMounted(() => {
   if (!storedData || storedData.length === 0) return;
   selectTab(0);
   setImages(storedData);
-  window.addEventListener('click', () => {
-    console.log('click');
-  });
 });
 
 </script>
@@ -155,7 +152,6 @@ onMounted(() => {
         <button class='start' @click='start'>Start</button>
       </span>
       </template>
-
       <practice-session v-if='running'
                         :images='selectedImages'
                         :transition-delay='selectedModeSettings.transitionDelay'
@@ -164,7 +160,6 @@ onMounted(() => {
                         :auto='selectedModeSettings.autoTransition'
                         :interval='selectedModeSettings.interval'
                         @done='running = false'/>
-
     </span>
     <span class="right-sidebar">Right sidebar</span>
     <span class="footer">Footer</span>
@@ -194,12 +189,11 @@ onMounted(() => {
   grid-column: 2 / 3;
   display: grid;
   grid-template: 1fr auto auto / 1fr;
-  margin: 0 auto;
   min-height: 50dvh;
   gap: 3rem;
   max-width: 1280px;
-  width: 80vw;
   color: var(--color-tertiary);
+  margin: 0 auto;
 }
 
 .right-sidebar {
@@ -216,12 +210,10 @@ onMounted(() => {
 /* 1. Image Selector */
 .image-selector-container {
   display: grid;
-  grid-template: auto 50vh / 1fr;
-  width: 100%;
+  max-width: 1280px;
 }
 
 .image-selector {
-  flex-basis: 100%;
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
 }

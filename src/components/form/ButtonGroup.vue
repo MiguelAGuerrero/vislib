@@ -1,7 +1,7 @@
 <script setup>
 
 const emit = defineEmits(['update:modelValue']);
-const props = defineProps({
+defineProps({
   modelValue: {
     type: [String, Number, Boolean],
   },
@@ -19,7 +19,6 @@ const props = defineProps({
 
 function handleClickEvent(event) {
   emit('update:modelValue', event.target.value);
-  console.log(props.modelValue, event.target.value, props.modelValue === event.target.value);
 }
 
 </script>
@@ -30,7 +29,7 @@ function handleClickEvent(event) {
           v-for="option of options"
           :key="option"
           :value='option'
-          :style='{optionSelected: "modelValue === option"}'
+          :style='{optionSelected: modelValue === option}'
           @click="handleClickEvent">
       {{ option }}
     </button>
@@ -63,13 +62,6 @@ button:last-child {
 
 button:hover {
   opacity: 50%;
-}
-
-.option-selected {
-  opacity: 80%;
-  outline-style: inset;
-  outline-color: var(--color-neutral);
-  background-color: var(--color-tertiary);
 }
 
 </style>

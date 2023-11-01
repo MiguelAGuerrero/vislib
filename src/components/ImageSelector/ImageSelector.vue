@@ -33,12 +33,10 @@ function addImage(imageUrl) {
   emitAddEvent([imageUrl]);
 }
 
-// eslint-disable-next-line no-unused-vars
 function addImages(imageUrls) {
   emitAddEvent(imageUrls.filter((imageUrl) => !imageExists(imageUrl)));
 }
 
-// eslint-disable-next-line no-unused-vars
 function removeImage(imageUrl) {
   emitRemoveEvent([imageUrl]);
 }
@@ -46,7 +44,7 @@ function removeImage(imageUrl) {
 </script>
 
 <template>
-  <image-dropzone
+  <ImageDropzone
       class="dropzone-container"
       :show-prompt="images.length === 0"
       @drop:url="addImage"
@@ -54,60 +52,36 @@ function removeImage(imageUrl) {
       @drop:csv="addImages"
   >
     <div class="container">
-      <image-preview-list :images="images" @remove:image="removeImage"></image-preview-list>
-      <span class="divider" />
+      <ImagePreviewList :images="images" @remove:image="removeImage"></ImagePreviewList>
       <span class="actions">
-        <image-paste-input @paste="addImage" class="paste-box"/>
-        <span class="or-divider"> OR </span>
+        <ImagePasteInput @paste="addImage" class="paste-box"/>
         <ImageUploader @upload="addImages"/>
       </span>
     </div>
-  </image-dropzone>
+  </ImageDropzone>
 </template>
 
 <style scoped>
 
 .container {
-  --spacing: 1rem;
   display: grid;
-  padding: var(--spacing);
   grid-template: 1fr auto / auto;
   width: 100%;
   height: 100%;
   border-radius: inherit;
   background-color: var(--color-primary);
-}
-
-.divider {
-  width: 100%;
-  height: 0.1rem;
-  background-color: var(--color-secondary);
-  border-radius: 2rem;
-  margin: 1rem 0;
+  color: var(--color-tertiary);
 }
 
 .actions {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  grid-template-rows: 1fr;
-  gap: var(--spacing);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1rem;
 }
 
-.or-divider {
-  width: 100%;
-  text-align: center;
-  align-self: center;
-  font-size: 1.5rem;
-  padding: 0 1rem;
-}
-
-.or-divider::before {
-  margin-right: var(--spacing);
-}
-
-.or-divider::after {
-  margin-left: var(--spacing);
+.actions > * {
+  min-height: 1rem;
 }
 
 </style>

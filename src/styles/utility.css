@@ -1,0 +1,36 @@
+.flex {
+    display: flex;
+}
+
+.grid {
+    display: grid;
+}
+
+.two-column {
+    grid-template-columns: 1fr 1fr;
+}
+
+.small-gap {
+    gap: 1rem;
+}
+
+.centered {
+    justify-items: center;
+    align-items: center;
+}
+
+.even-grow > * {
+    flex-basis: 100%;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.w-full {
+    width: 100%;
+}

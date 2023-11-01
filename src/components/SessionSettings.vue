@@ -1,7 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import TimeInput from '../form/TimeInput.vue';
+import TimeInput from './form/TimeInput.vue';
 
 defineProps({
   settings: {
@@ -50,7 +50,7 @@ defineProps({
             for="transition-delay">
           Transition Delay
         </label>
-        <input :value="settings.transitionDelay" :disabled="!settings.autoTransition"/>
+        <time-input :value="settings.transitionDelay" :disabled="!settings.autoTransition" />
       </span>
       <span class="setting">
         <label id='loop-label'>
@@ -77,6 +77,7 @@ defineProps({
   border-radius: var(--border-radius);
   gap: var(--gap-size);
   place-items: center;
+  color: var(--color-tertiary);
 }
 
 .session-settings__body {
