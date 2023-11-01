@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { faClose, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-import { onMounted, ref, watch } from 'vue';
-import { useEventListener } from '@vueuse/core';
+import { nextTick, onMounted, ref } from 'vue';
+import { useDebounceFn, useEventListener, useMutationObserver } from '@vueuse/core';
 import AddTabButton from './AddTabButton.vue';
 import TabScroller from './TabScroller.vue';
 
@@ -23,27 +23,30 @@ const props = defineProps({
 
 const emit = defineEmits(['update:activeTab', 'update:tabs']);
 const isOverflowing = ref(false);
+const tabsList = ref();
 
 function scrollTabList(amount) {
-  const tabsList = document.querySelector('.tabs-list');
-  tabsList.scrollBy({
+  tabsList.value.scrollBy({
     left: amount,
     behavior: 'smooth',
   });
 }
 
 function checkOverflow() {
-  const tabsList = document.querySelector('.tabs-list');
-  isOverflowing.value = tabsList.scrollWidth > tabsList.clientWidth;
+  nextTick(() => {
+    isOverflowing.value = tabsList.value.scrollWidth > tabsList.value.clientWidth;
+  });
 }
 
-function watchTabs() {
-  watch(() => props.tabs, checkOverflow);
-}
+const CHECK_OVERFLOW_DELAY = 100;
 
-useEventListener('resize', checkOverflow);
+useEventListener('resize', useDebounceFn(checkOverflow, CHECK_OVERFLOW_DELAY));
+
 onMounted(() => {
-  watchTabs();
+  useMutationObserver(tabsList.value, checkOverflow, {
+    childList: true,
+    subtree: true,
+  });
 });
 
 function getDefaultName(tabs) {
@@ -88,7 +91,7 @@ function validateName(index) {
 <template>
   <div class="tabs-container" @resize="checkOverflow">
     <TabScroller direction="left" v-show="isOverflowing" @click="scrollTabList" />
-    <div class="tabs-list">
+    <div ref='tabsList' class="tabs-list">
       <span
           v-for='(tab, index) of tabs'
           tabindex="0"
@@ -102,7 +105,7 @@ function validateName(index) {
                @blur="validateName(index)"
                @click="selectTab(index)"/>
         <span v-else>{{ tab.name }}</span>
-        <FontAwesomeIcon class='close-tab' :icon="faClose" @click.stop="removeTab(index)" />
+        <FontAwesomeIcon class='close-tab' :icon="faClose" @click="removeTab(index)" />
       </span>
       <AddTabButton @click="addTab" v-show="!isOverflowing"/>
     </div>
