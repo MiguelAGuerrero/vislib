@@ -25,7 +25,8 @@ const icon = computed(() => {
 });
 
 function handleClick() {
-  const amount = props.direction === 'right' ? 100 : -100;
+  const SCROLL_AMOUNT = 200;
+  const amount = SCROLL_AMOUNT * ((props.direction === 'right') ? 1 : -1);
   emit('click', amount);
 }
 

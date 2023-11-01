@@ -86,7 +86,7 @@ function validateName(index) {
 </script>
 
 <template>
-  <div class="tabs-list-container" @resize="checkOverflow">
+  <div class="tabs-container" @resize="checkOverflow">
     <TabScroller direction="left" v-show="isOverflowing" @click="scrollTabList" />
     <div class="tabs-list">
       <span
@@ -106,17 +106,18 @@ function validateName(index) {
       </span>
       <AddTabButton @click="addTab" v-show="!isOverflowing"/>
     </div>
-    <AddTabButton @click="addTab" v-show="isOverflowing" />
     <TabScroller direction="right" v-show='isOverflowing' @click="scrollTabList"/>
+    <AddTabButton @click="addTab" v-show="isOverflowing" />
   </div>
 </template>
 
 <style scoped>
 
-.tabs-list-container {
+.tabs-container {
   display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  grid-auto-flow: column;
   border: var(--color-secondary) 1px solid;
+  height: min-content;
 }
 
 .tabs-list {
@@ -124,23 +125,24 @@ function validateName(index) {
   display: flex;
   padding: 0.5rem;
   gap: 0.5rem;
-  max-width: 100%;
   overflow: auto;
-}
-
-.tabs-list > * {
-  color: var(--color-accent);
-  border-radius: var(--border-radius);
+  grid-auto-flow: column;
+  flex-grow: 1;
+  max-width: 100%;
 }
 
 .tab {
+  color: var(--color-accent);
+  border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   padding: 0.5rem 0.5rem;
   gap: 0.5rem;
-  max-width: 25rem;
   transition-property: background-color, color, opacity;
   transition-duration: 0.1s;
+  white-space: nowrap;
+  max-width: 25ch;
+  flex: 1;
 }
 
 .hover:hover {
@@ -158,6 +160,7 @@ function validateName(index) {
   color: var(--color-accent);
   position: relative;
   font-size: 1rem;
+  width: 100%;
 }
 
 .tab:not(.tab--active) input {
@@ -187,6 +190,7 @@ function validateName(index) {
   opacity: 100%;
   background-color: var(--color-tertiary);
   color: var(--color-primary);
+  min-width: 30ch;
 }
 
 .tab--active:hover input {
