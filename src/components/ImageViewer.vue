@@ -7,14 +7,9 @@ const props = defineProps({
     type: String,
     default: '1 / 1',
   },
-  size: {
-    type: Number,
-    default: 200,
-  },
 });
 
 const style = computed(() => ({
-  width: `${props.size}px`,
   'aspect-ratio': props.aspectRatio,
 }));
 
@@ -60,7 +55,8 @@ function handleImageError() {
 <style scoped>
 
 .image-viewer-container {
-  border-radius: var(--border-radius);
+  display: flex;
+  place-content: center;
 }
 
 .image-not-found {
@@ -76,8 +72,17 @@ img {
 
 .loading-indicator {
   margin: auto 0;
-  height: 100%;
   text-align: center;
+}
+
+.loading-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 2px);
+  border: #cccccc dashed 1px;
 }
 
 .hidden {
