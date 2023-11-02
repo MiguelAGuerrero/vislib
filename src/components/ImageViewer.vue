@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   src: String,
@@ -18,34 +18,42 @@ const style = computed(() => ({
   'aspect-ratio': props.aspectRatio,
 }));
 
+const Status = {
+  LOADING: 'loading',
+  LOADED: 'loaded',
+  ERROR: 'error',
+};
+
 const image = ref();
-const imageNotFound = ref(false);
+const imageStatus = ref(Status.LOADING);
 
-onMounted(() => {
-  image.value.onerror = () => { imageNotFound.value = true; };
-  image.value.onload = () => { imageNotFound.value = false; };
-});
+function handleImageLoad() {
+  imageStatus.value = Status.LOADED;
+}
 
-function handleSelect() {
-  imageNotFound.value = true;
+function handleImageError() {
+  imageStatus.value = Status.ERROR;
 }
 
 </script>
 
 <template>
   <div class='image-viewer-container' :style="style">
-    <div class='image-not-found' v-if="imageNotFound">
+    <div class='loading-indicator' v-if="imageStatus === Status.LOADING" >Loading...</div>
+    <div class='image-not-found' v-else-if="imageStatus === Status.ERROR">
       <div>"{{src}}"</div>
       IMAGE NOT FOUND
     </div>
     <img
-      v-else
       ref='image'
       loading="lazy"
       draggable="false"
       alt='reference image'
       :src="src"
-      @select="handleSelect" />
+      :class='{hidden: imageStatus !== Status.LOADED}'
+      @load="handleImageLoad"
+      @error="handleImageError"
+    />
   </div>
 </template>
 
@@ -64,6 +72,16 @@ img {
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+.loading-indicator {
+  margin: auto 0;
+  height: 100%;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
 }
 
 </style>
