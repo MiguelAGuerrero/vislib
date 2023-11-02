@@ -25,14 +25,11 @@ const showOverlay = ref(true);
         v-for="(img) of images"
         :show="showOverlay"
         :key="img">
-      <div class="image-container">
-        <ImageViewer
-            draggable="false"
-            :src="img"
-            :size="20"
-            @click="emit('click:image', img)">
-        </ImageViewer>
-      </div>
+      <ImageViewer
+          draggable="false"
+          :src="img"
+          @click="emit('click:image', img)">
+      </ImageViewer>
       <template #overlay>
         <div class="overlay">
           <FontAwesomeIcon
@@ -51,23 +48,11 @@ const showOverlay = ref(true);
 }
 
 .preview-list {
-  display: grid;
-  overflow: auto;
+  display: flex;
+  grid-auto-flow: column;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
   gap: 0.25rem;
-}
-
-@media(max-width: 768px) {
-  .preview-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .image-container {
-    aspect-ratio: 1/1;
-    height: 1fr;
-  }
+  justify-content: center;
 }
 
 .overlay {

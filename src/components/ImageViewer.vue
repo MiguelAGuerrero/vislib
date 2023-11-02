@@ -13,7 +13,7 @@ const props = defineProps({
   },
 });
 
-const style = computed(() => ref({
+const style = computed(() => ({
   width: `${props.size}px`,
   'aspect-ratio': props.aspectRatio,
 }));
@@ -51,14 +51,13 @@ function handleSelect() {
 
 <style scoped>
 
+.image-viewer-container {
+  border-radius: var(--border-radius);
+}
+
 .image-not-found {
   margin: auto 0;
   padding: 1rem;
-}
-
-.image-viewer-container {
-  display: flex;
-  place-items: center;
 }
 
 img {
