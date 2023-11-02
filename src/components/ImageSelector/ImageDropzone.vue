@@ -32,16 +32,13 @@ function readDataUrl(file) {
 }
 
 function readFile(file) {
-  console.log('reading file', file);
   if (file.type === 'text/csv') {
     readCsv(file);
     return;
   }
   if (file.type.match('image.*')) {
     readDataUrl(file);
-    return;
   }
-  console.warn('file is not an image', file);
 }
 
 function readDirectory(item) {
@@ -51,7 +48,6 @@ function readDirectory(item) {
 function readAsImageSearchEngineDrop(item) {
   item.getAsString((data) => {
     let url = data;
-    console.log('read item as string', data);
     const matchers = {
       google: /imgurl=([^&]+)/i,
       bing: /mediaurl=([^&]+)/i,
@@ -94,7 +90,6 @@ function getImages(event) {
   else {
     const url = event.dataTransfer.getData('text/plain');
     if (!url) {
-      console.warn('Unable to get dropped image url', event.dataTransfer);
       return;
     }
     emit('drop:url', url);
