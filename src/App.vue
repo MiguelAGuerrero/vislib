@@ -12,9 +12,9 @@ import PracticeSession from './components/PracticeSession/PracticeSession.vue';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
-  'https://th.bing.com/th/id/OIP.VOvY_Xwrx3OCej1WH4-k6AHaHa?pid=ImgDet&rs=1',
-  'https://th.bing.com/th/id/OIP.IgytcNrj3cY-40v-uZfCOAHaE8?pid=ImgDet&rs=1',
-  'https://www.9jardi.com/wp-content/uploads/2019/12/da.jpg',
+  'https://picsum.photos/200/300',
+  'https://picsum.photos/500',
+  'https://picsum.photos/200/500',
 ]);
 
 const running = ref(false);

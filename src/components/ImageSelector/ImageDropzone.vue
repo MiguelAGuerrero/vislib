@@ -121,7 +121,7 @@ function handleDrop(event) {
       </slot>
     <div>
       <div :class="style"><span v-if="showPrompt">
-              <font-awesome-icon class='images-icon' :icon="faImages"></font-awesome-icon>
+              <FontAwesomeIcon class='images-icon' :icon="faImages"></FontAwesomeIcon>
         Drag images here</span></div>
     </div>
   </div>

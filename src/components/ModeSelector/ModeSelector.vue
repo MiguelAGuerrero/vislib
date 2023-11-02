@@ -6,12 +6,12 @@
          :key="mode.name"
          @click="handleCardClick(mode)">
       <div class="mode-card-icon">
-        <font-awesome-icon :icon="mode.icon"/>
+        <FontAwesomeIcon :icon="mode.icon"/>
       </div>
       <h3 class="mode-card-title">{{ mode.name }}</h3>
       <p class="mode-card-description">{{ mode.description }}</p>
       <div class="mode-card-check">
-        <font-awesome-icon :icon="faCheckCircle"
+        <FontAwesomeIcon :icon="faCheckCircle"
                            :style='showCheck(mode)'/>
       </div>
     </div>

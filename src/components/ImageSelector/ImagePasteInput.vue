@@ -91,9 +91,9 @@ async function handlePaste(event) {
 <template>
   <div class="paste-box-container">
     <div class="paste-box__status-indicator-container" v-if="pasteStatus !== LoadStatus.IDLE">
-      <font-awesome-icon
+      <FontAwesomeIcon
           class="paste-box__status-indicator"
-          :icon="pasteStatus.icon"></font-awesome-icon>
+          :icon="pasteStatus.icon"></FontAwesomeIcon>
     </div>
     <input :class="pasteStatus.class"
            type="text"

@@ -22,19 +22,20 @@ const showOverlay = ref(true);
 <template>
   <div class="preview-list">
     <MagOverlay
-        :show="showOverlay"
-        class="image-container"
         v-for="(img) of images"
+        :show="showOverlay"
         :key="img">
-      <ImageViewer
-          class="h-full"
-          draggable="false"
-          :src="img"
-          @click="emit('click:image', img)">
-      </ImageViewer>
+      <div class="image-container">
+        <ImageViewer
+            draggable="false"
+            :src="img"
+            :size="20"
+            @click="emit('click:image', img)">
+        </ImageViewer>
+      </div>
       <template #overlay>
         <div class="overlay">
-          <font-awesome-icon
+          <FontAwesomeIcon
               class="trash-icon"
               :icon="faTrash"
               @click="emit('remove:image', img)" />
@@ -45,21 +46,12 @@ const showOverlay = ref(true);
 </template>
 
 <style scoped>
-
-.image-container {
-  max-height: 128px;
-  transition: 0.1s;
-  border-radius: var(--border-radius);
-  box-shadow: black 0 0 4px;
-  overflow: hidden;
-}
-
 .image-container:hover {
   transform: scale(0.95);
 }
 
 .preview-list {
-  display: flex;
+  display: grid;
   overflow: auto;
   flex-wrap: wrap;
   align-items: center;

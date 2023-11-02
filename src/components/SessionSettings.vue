@@ -24,7 +24,7 @@ defineProps({
 <template>
   <div class='session-settings'>
     <h1 class="session-settings__title">
-      <font-awesome-icon :icon="faGear"></font-awesome-icon>
+      <FontAwesomeIcon :icon="faGear"></FontAwesomeIcon>
       Settings
     </h1>
     <div class='session-settings__body'>

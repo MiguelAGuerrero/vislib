@@ -1,10 +1,22 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
-defineProps({
+const props = defineProps({
   src: String,
-  aspectRatio: Array,
+  aspectRatio: {
+    type: String,
+    default: '1 / 1',
+  },
+  size: {
+    type: Number,
+    default: 200,
+  },
 });
+
+const style = computed(() => ref({
+  width: `${props.size}px`,
+  'aspect-ratio': props.aspectRatio,
+}));
 
 const image = ref();
 const imageNotFound = ref(false);
@@ -21,7 +33,7 @@ function handleSelect() {
 </script>
 
 <template>
-  <div class='image-viewer-container'>
+  <div class='image-viewer-container' :style="style">
     <div class='image-not-found' v-if="imageNotFound">
       <div>"{{src}}"</div>
       IMAGE NOT FOUND
@@ -33,7 +45,6 @@ function handleSelect() {
       draggable="false"
       alt='reference image'
       :src="src"
-      :class="$attrs.class"
       @select="handleSelect" />
   </div>
 </template>
@@ -51,15 +62,9 @@ function handleSelect() {
 }
 
 img {
-  object-fit: contain;
+  object-fit: cover;
   width: 100%;
   height: 100%;
-}
-
-@media (max-width: 768px) {
-  img {
-    object-fit: cover;
-  }
 }
 
 </style>
