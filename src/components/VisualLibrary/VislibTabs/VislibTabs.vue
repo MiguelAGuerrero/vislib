@@ -137,7 +137,8 @@ function validateName(index) {
 .tab {
   color: var(--color-accent);
   border-radius: var(--border-radius);
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   padding: 0.5rem 0.5rem;
   gap: 0.5rem;
