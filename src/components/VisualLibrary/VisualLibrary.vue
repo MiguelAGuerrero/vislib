@@ -1,7 +1,7 @@
 <script setup>
 
-import ImagePreviewList from './ImageList.vue';
 import ImageDropzone from './ImageDropzone.vue';
+import ImageGallery from './ImageGallery.vue';
 
 const props = defineProps({
   images: {
@@ -50,7 +50,7 @@ function removeImage(imageUrl) {
       @drop:csv="addImages"
   >
     <div class="container">
-      <ImagePreviewList :images="images" @remove:image="removeImage"></ImagePreviewList>
+      <ImageGallery :images="images" @remove:image="removeImage"></ImageGallery>
     </div>
   </ImageDropzone>
 </template>

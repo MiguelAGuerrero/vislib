@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ImageViewer from '../ImageViewer.vue';
-import MagOverlay from './MagOverlay.vue';
+import ImageOverlay from './ImageOverlay.vue';
 
 defineProps({
   images: {
@@ -24,17 +24,21 @@ const imageSize = ref('128px'); // Initial image size
 </script>
 
 <template>
-  <div ref="imageGallery" class="preview-list">
-    <MagOverlay
+  <div ref="imageGallery" class="image-gallery">
+    <ImageOverlay
         v-for="(img) of images"
         :show="showOverlay"
         :key="img"
     >
-      <span class="image-container">
+      <span class="image-container"
+            @mouseenter="showOverlay = true"
+            @mouseleave="showOverlay = false"
+      >
         <ImageViewer
             :src="img"
             :size="imageSize"
-            @click="emit('click:image', img)">
+            @click="emit('click:image', img)"
+        >
         </ImageViewer>
       </span>
       <template #overlay>
@@ -46,7 +50,7 @@ const imageSize = ref('128px'); // Initial image size
           />
         </div>
       </template>
-    </MagOverlay>
+    </ImageOverlay>
   </div>
 </template>
 
@@ -58,9 +62,9 @@ const imageSize = ref('128px'); // Initial image size
   transform: scale(0.95);
 }
 
-.preview-list {
-  display: grid; /* Change to grid layout */
-  grid-template-columns: repeat(auto-fit, minmax(100px, 256px)); /* 3-column grid */
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 256px));
   gap: 4px;
   justify-content: center;
   align-content: start;
@@ -102,7 +106,7 @@ const imageSize = ref('128px'); // Initial image size
 
 @media (max-width: 768px) {
   .preview-list {
-    grid-template-columns: repeat(3, 1fr); /* 3-column grid for small screens */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>
