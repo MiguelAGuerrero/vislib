@@ -193,7 +193,7 @@ function validateName(index) {
   opacity: 100%;
   background-color: var(--color-tertiary);
   color: var(--color-primary);
-  min-width: 30ch;
+  min-width: 20ch;
 }
 
 .tab--active:hover input {

@@ -2,8 +2,6 @@
 
 import ImagePreviewList from './ImageList.vue';
 import ImageDropzone from './ImageDropzone.vue';
-import ImagePasteInput from './ImagePasteInput.vue';
-import ImageUploader from './ImageUploader.vue';
 
 const props = defineProps({
   images: {
@@ -53,10 +51,6 @@ function removeImage(imageUrl) {
   >
     <div class="container">
       <ImagePreviewList :images="images" @remove:image="removeImage"></ImagePreviewList>
-      <span class="actions">
-        <ImagePasteInput @paste="addImage" class="paste-box"/>
-        <ImageUploader @upload="addImages"/>
-      </span>
     </div>
   </ImageDropzone>
 </template>
@@ -71,13 +65,6 @@ function removeImage(imageUrl) {
   border-radius: inherit;
   background-color: var(--color-primary);
   color: var(--color-tertiary);
-}
-
-.actions {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1rem;
 }
 
 .actions > * {

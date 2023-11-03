@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { faImages } from '@fortawesome/free-solid-svg-icons';
 
 defineProps({

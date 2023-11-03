@@ -65,7 +65,6 @@ async function emitPastedImageLink(pastedData) {
     throw new Error('Invalid image link');
   }
 }
-
 async function handlePaste(event) {
   event.preventDefault();
   pasteStatus.value = LoadStatus.LOADING;
@@ -113,13 +112,10 @@ async function handlePaste(event) {
   grid-template-columns: auto 1fr;
   align-items: center;
   overflow: hidden;
-  background-color: var(--color-secondary);
-  border-radius: var(--border-radius);
 }
 
 .paste-box > input {
   border: none;
-  height: 100%;
   border-bottom-right-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
   background-color: transparent;
@@ -156,7 +152,6 @@ async function handlePaste(event) {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
   padding: 0 1rem;
 }
 
