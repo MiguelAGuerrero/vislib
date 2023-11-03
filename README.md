@@ -1,5 +1,6 @@
 # vislib
 Web app for creating your own collection of references to practice drawing from.
+<img width="1347" alt="image" src="https://github.com/MiguelAGuerrero/vislib/assets/24864393/fab20003-8b67-4502-a258-f10b41fac237">
 
 ## Inspiration
 
