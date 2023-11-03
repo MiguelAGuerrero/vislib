@@ -30,13 +30,13 @@ const imageSize = ref('128px'); // Initial image size
         :show="showOverlay"
         :key="img"
     >
-      <ImageViewer
-          class="image-container"
-          :src="img"
-          :size="imageSize"
-          @click="emit('click:image', img)"
-      >
-      </ImageViewer>
+      <span class="image-container">
+        <ImageViewer
+            :src="img"
+            :size="imageSize"
+            @click="emit('click:image', img)">
+        </ImageViewer>
+      </span>
       <template #overlay>
         <div class="overlay">
           <FontAwesomeIcon
@@ -51,7 +51,10 @@ const imageSize = ref('128px'); // Initial image size
 </template>
 
 <style scoped>
-.image-container:hover {
+
+
+.image-container > *:hover {
+  padding: 1px; /* Prevents image from jumping when overlay is shown */
   transform: scale(0.95);
 }
 
