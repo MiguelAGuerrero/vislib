@@ -139,7 +139,7 @@ async function handlePaste(event) {
   outline-offset: calc(var(--outline-width) * -1);
 }
 
-.paste-box--success {
+ .paste-box--success {
   outline-color: var(--color-success);
 }
 

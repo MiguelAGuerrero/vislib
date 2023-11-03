@@ -1,20 +1,22 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 
 // Components
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import ImageSelector from './components/ImageSelector/ImageSelector.vue';
-import MagTabs from './components/ImageSelector/MagTabs/MagTabs.vue';
 import SessionSettings from './components/SessionSettings.vue';
 import ModeSelector from './components/ModeSelector/ModeSelector.vue';
 import PracticeSession from './components/PracticeSession/PracticeSession.vue';
+import VislibToolbar from './components/VislibToolbar.vue';
+import VislibTabs from './components/VisualLibrary/VislibTabs/VislibTabs.vue';
+import VisualLibrary from './components/VisualLibrary/VisualLibrary.vue';
+import useImageInput from './composables/useImageInput.js';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
-  'https://picsum.photos/200/300',
-  'https://picsum.photos/500',
-  'https://picsum.photos/200/500',
+    'https://source.unsplash.com/random/?hand',
+    'https://source.unsplash.com/random/?eye',
+    'https://source.unsplash.com/random/?pose'
 ]);
 
 const running = ref(false);
@@ -78,7 +80,6 @@ const selectedModeSettings = computed(
   () => modeSettings[selectedMode.value.toLowerCase()].settings,
 );
 
-// eslint-disable-next-line no-unused-vars
 function saveImages() {
   if (images.value.length === 0) return;
   const fileData = images.value.join(',');
@@ -101,6 +102,14 @@ function start() {
 function addImages(added) {
   getSelectedTab().images.push(...added);
 }
+
+const {images: uploadedImages, input: uploadImages} = useImageInput();
+
+watch(uploadedImages, (value) => {
+  console.log('uploaded', value);
+  if (value.length === 0) return;
+  addImages(value);
+});
 
 function removeImages(removed) {
   const s = getSelectedTab();
@@ -128,29 +137,27 @@ onMounted(() => {
 
 <template>
   <div class='app-container'>
-    <span class="header">My Drawing Session</span>
-    <span class="left-sidebar">Left sidebar</span>
-    <span class="main-content">
+      <VislibTabs :tabs="tabs"
+                class="image-selector__tabs"
+                v-model:tabs="tabs"
+                v-model:active-tab="selectedTab" />
+     <VislibToolbar
+         @save="saveImages"
+         @upload="uploadImages"
+     />
+    <main class="main-content">
       <template v-if="!running">
         <div class="image-selector-container">
-          <mag-tabs :tabs="tabs"
-                    class="image-selector__tabs"
-                    v-model:tabs="tabs"
-                    v-model:active-tab="selectedTab" />
-          <image-selector
+          <VisualLibrary
               class="image-selector"
               :images="selectedImages"
               @add="addImages"
-              @remove="removeImages" />
+          />
         </div>
-      <div class="setting-options">
+<!--      <div class="setting-options">
         <mode-selector v-model="selectedMode" />
       </div>
-      <session-settings :settings="customSettings" v-show="selectedMode === modes.custom"/>
-      <span class="start-button">
-        <FontAwesomeIcon class='start-button__icon' :icon="faPlay"></FontAwesomeIcon>
-        <button class='start' @click='start'>Start</button>
-      </span>
+      <session-settings :settings="customSettings" v-show="selectedMode === modes.custom"/>-->
       </template>
       <practice-session v-if='running'
                         :images='selectedImages'
@@ -160,57 +167,25 @@ onMounted(() => {
                         :auto='selectedModeSettings.autoTransition'
                         :interval='selectedModeSettings.interval'
                         @done='running = false'/>
-    </span>
-    <span class="right-sidebar">Right sidebar</span>
-    <span class="footer">Footer</span>
+    </main>
   </div>
 </template>
 
 <style scoped>
 
-.app-container {
-  display: grid;
-  grid-template: auto 1fr auto / auto 1fr auto; /*Holy grail layout*/
-}
-
-.header {
-  display: none;
-  grid-column: 1 / 4;
-  background-color: var(--color-secondary);
-  padding: 1rem;
-}
-
-.left-sidebar {
-  grid-column:  1 / 2;
-  display: none;
-}
-
 .main-content {
   grid-column: 2 / 3;
   display: grid;
-  grid-template: 1fr auto auto / 1fr;
-  min-height: 50dvh;
+  grid-template: 1fr / 1fr;
   gap: 3rem;
-  max-width: 1280px;
   color: var(--color-tertiary);
-  margin: 0 auto;
-}
-
-.right-sidebar {
-  grid-column: 3 / 4;
-  display: none;
-}
-
-.footer {
-  display: none;
-  grid-column: 1 / 4;
+  height: 90vh;
 }
 
 /* Components */
 /* 1. Image Selector */
 .image-selector-container {
   display: grid;
-  max-width: 1280px;
 }
 
 .image-selector {
@@ -222,23 +197,5 @@ onMounted(() => {
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 }
-
-/* 3. Actions */
-.start-button {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  margin-top: auto;
-  color: var(--color-accent);
-  align-items: center;
-  background-color: var(--color-accent);
-  border-radius: var(--border-radius);
-}
-
-.start-button__icon {
-  height: 2rem;
-  color: var(--color-secondary);
-  padding-left: 1rem;
-}
-/* End Components */
 
 </style>

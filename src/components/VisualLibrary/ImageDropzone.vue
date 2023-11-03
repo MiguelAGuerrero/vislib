@@ -44,23 +44,27 @@ function readDirectory(item) {
   return item;
 }
 
+function matchUrl(url) {
+  const matchers = {
+    google: /imgurl=([^&]+)/i,
+    bing: /mediaurl=([^&]+)/i,
+    generic: /([^&#]+\.(jpg|gif|png|jpeg))/i,
+  };
+  let match;
+  Object.values(matchers).find((matcher) => {
+    match = url.match(matcher);
+    return match;
+  });
+  return match;
+}
+
 function readAsImageSearchEngineDrop(item) {
   item.getAsString((data) => {
     let url = data;
-    const matchers = {
-      google: /imgurl=([^&]+)/i,
-      bing: /mediaurl=([^&]+)/i,
-      generic: /([^&#]+\.(jpg|gif|png|jpeg))/i,
-    };
-    let match;
-    Object.values(matchers).find((matcher) => {
-      match = data.match(matcher);
-      return match;
-    });
-    if (match) {
-      const [, capture] = match;
-      url = decodeURIComponent(capture);
-    }
+    const match = matchUrl(url);
+    if (!match) return;
+    const [, capture] = match;
+    url = decodeURIComponent(capture);
     emit('drop:url', url);
   });
 }

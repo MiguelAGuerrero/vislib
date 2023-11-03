@@ -59,12 +59,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
-  /*Breakpoints*/
-    --sm: 640px;
-    --md: 768px;
-    --lg: 1024px;
-    --xl: 1280px;
 }
 
 html {
@@ -166,23 +160,4 @@ input:focus,
 button:focus,
 button:focus-visible {
   outline: 4px auto var(--color-accent);
-}
-
-#app {
-  max-width: 2560px;
-  min-height: 100%;
-  padding: 0;
-  margin: auto;
-  text-align: center;
-  flex: 1;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: var(--color-tertiary);
-  }
-  a:hover {
-    color: #747bff;
-  }
 }

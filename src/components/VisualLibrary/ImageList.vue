@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import {
+  ref, defineProps, defineEmits,
+} from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ImageViewer from '../ImageViewer.vue';
@@ -16,26 +18,32 @@ defineProps({
 
 const emit = defineEmits(['click:image', 'remove:image']);
 const showOverlay = ref(true);
+const imageGallery = ref();
+const imageSize = ref('128px'); // Initial image size
 
 </script>
 
 <template>
-  <div class="preview-list">
+  <div ref="imageGallery" class="preview-list">
     <MagOverlay
         v-for="(img) of images"
         :show="showOverlay"
-        :key="img">
+        :key="img"
+    >
       <ImageViewer
-          draggable="false"
+          class="image-container"
           :src="img"
-          @click="emit('click:image', img)">
+          :size="imageSize"
+          @click="emit('click:image', img)"
+      >
       </ImageViewer>
       <template #overlay>
         <div class="overlay">
           <FontAwesomeIcon
               class="trash-icon"
               :icon="faTrash"
-              @click="emit('remove:image', img)" />
+              @click="emit('remove:image', img)"
+          />
         </div>
       </template>
     </MagOverlay>
@@ -48,11 +56,12 @@ const showOverlay = ref(true);
 }
 
 .preview-list {
-  display: flex;
-  grid-auto-flow: column;
-  flex-wrap: wrap;
-  gap: 0.25rem;
+  display: grid; /* Change to grid layout */
+  grid-template-columns: repeat(auto-fit, minmax(100px, 256px)); /* 3-column grid */
+  gap: 4px;
   justify-content: center;
+  align-content: start;
+  padding: 4px;
 }
 
 .overlay {
@@ -78,7 +87,7 @@ const showOverlay = ref(true);
   cursor: pointer;
   color: var(--color-black);
   background-color: var(--color-white);
-  padding:  0.5rem;
+  padding: 0.5rem;
   margin-top: 0.5rem;
   border-radius: 0.25rem;
   box-shadow: var(--color-black) 0 0 3px;
@@ -88,4 +97,9 @@ const showOverlay = ref(true);
   transform: scale(1.1);
 }
 
+@media (max-width: 768px) {
+  .preview-list {
+    grid-template-columns: repeat(3, 1fr); /* 3-column grid for small screens */
+  }
+}
 </style>

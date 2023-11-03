@@ -33,7 +33,7 @@ function handleImageError() {
 </script>
 
 <template>
-  <div class='image-viewer-container' :style="style">
+  <div class='flex centered rounded' :style="style">
     <div class='loading-indicator' v-if="imageStatus === Status.LOADING" >Loading...</div>
     <div class='image-not-found' v-else-if="imageStatus === Status.ERROR">
       <div>"{{src}}"</div>
@@ -45,7 +45,6 @@ function handleImageError() {
       draggable="false"
       alt='reference image'
       :src="src"
-      :class='{hidden: imageStatus !== Status.LOADED}'
       @load="handleImageLoad"
       @error="handleImageError"
     />
@@ -53,11 +52,6 @@ function handleImageError() {
 </template>
 
 <style scoped>
-
-.image-viewer-container {
-  display: flex;
-  place-content: center;
-}
 
 .image-not-found {
   margin: auto 0;

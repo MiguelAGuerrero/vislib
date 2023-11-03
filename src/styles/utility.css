@@ -34,3 +34,8 @@
 .w-full {
     width: 100%;
 }
+
+.rounded {
+    border-radius: 0.5rem;
+    overflow: clip;
+}

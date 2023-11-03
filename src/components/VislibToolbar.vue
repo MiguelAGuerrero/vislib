@@ -6,7 +6,7 @@ const emit = defineEmits(['start', 'paste', 'upload', 'save']);
 
 <template>
   <div role="toolbar" class="toolbar">
-    <VislibToolbarItem :icon="faSave" @click="emit('save')">Save Session</VislibToolbarItem>
+    <VislibToolbarItem :icon="faSave" @click="emit('save')">Save URLs</VislibToolbarItem>
     <VislibToolbarItem :icon="faClipboard" @click="emit('paste')">Paste Images</VislibToolbarItem>
     <VislibToolbarItem :icon="faUpload" @click="emit('upload')">Upload Images</VislibToolbarItem>
     <VislibToolbarItem :icon="faPlay" @click="emit('start')">Start Session</VislibToolbarItem>

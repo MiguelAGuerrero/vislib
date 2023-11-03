@@ -15,18 +15,29 @@ async function readImage(file) {
 }
 
 function getSucceeded(results) {
-  return results.filter((result) => result.status === 'fulfilled');
+  return results
+      .filter((result) => result.status === 'fulfilled')
+      .map((result) => result.value);
+}
+
+function getErrors(results) {
+  return results
+    .filter((result) => result.status === 'rejected')
+    .map((result) => result.reason);
 }
 
 function getFiles(event) {
   return event?.target?.files || [];
 }
 
-export default function useImageReader(fileInputRef) {
+export default function useImageReader(fileInputElement) {
+  if (!fileInputElement) {
+    throw new Error('File input element is undefined.');
+  }
+
   const images = ref([]);
-  const errors = computed(() => images.value.some(
-      (result) => result.status === 'rejected')
-  );
+  const rejections = ref([]);
+
   async function readFiles(event) {
     const files = getFiles(event);
     if (!files.length) return;
@@ -34,26 +45,24 @@ export default function useImageReader(fileInputRef) {
     images.value = []; // Reset images array on new file selection
 
     const readPromises = Array.from(files).map(readImage);
-    return Promise.allSettled(readPromises);
+    const results = await Promise.allSettled(readPromises);
+    images.value = getSucceeded(results);
+    rejections.value = getErrors(results);
   }
 
-  const addEventListener = () => {
-    if (fileInputRef.value) {
-      fileInputRef.value.addEventListener('change', readFiles);
-    }
+  const listenForChanges = () => {
+    fileInputElement.addEventListener('change', readFiles);
   };
 
-  const removeEventListener = () => {
-    if (fileInputRef.value) {
-      fileInputRef.value.removeEventListener('change', readFiles);
-    }
+  const removeChangeListener = () => {
+    fileInputElement.removeEventListener('change', readFiles);
   };
 
-  onMounted(addEventListener);
-  onUnmounted(removeEventListener);
+  onMounted(listenForChanges);
+  onUnmounted(removeChangeListener);
 
   return {
     images,
-    errors
+    rejections
   };
 }
