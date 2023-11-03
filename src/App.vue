@@ -2,12 +2,12 @@
 import {computed, onMounted, ref, watch} from 'vue';
 
 // Components
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
 import SessionSettings from './components/SessionSettings.vue';
 import ModeSelector from './components/ModeSelector/ModeSelector.vue';
 import PracticeSession from './components/PracticeSession/PracticeSession.vue';
 import VislibToolbar from './components/VislibToolbar.vue';
+import VislibToolbarItem from './components/VislibToolbarItem.vue';
 import VislibTabs from './components/VisualLibrary/VislibTabs/VislibTabs.vue';
 import VisualLibrary from './components/VisualLibrary/VisualLibrary.vue';
 import useImageInput from './composables/useImageInput.js';
@@ -106,7 +106,6 @@ function addImages(added) {
 const {images: uploadedImages, input: uploadImages} = useImageInput();
 
 watch(uploadedImages, (value) => {
-  console.log('uploaded', value);
   if (value.length === 0) return;
   addImages(value);
 });
@@ -133,6 +132,7 @@ onMounted(() => {
   setImages(storedData);
 });
 
+
 </script>
 
 <template>
@@ -141,10 +141,11 @@ onMounted(() => {
                 class="image-selector__tabs"
                 v-model:tabs="tabs"
                 v-model:active-tab="selectedTab" />
-     <VislibToolbar
-         @save="saveImages"
-         @upload="uploadImages"
-     />
+     <VislibToolbar>
+       <VislibToolbarItem :icon="faSave" @click='saveImages'>Save URLs</VislibToolbarItem>
+       <VislibToolbarItem :icon="faUpload" @click="uploadImages">Upload Images</VislibToolbarItem>
+       <VislibToolbarItem accent :icon="faPlay" @click="start">Start Session</VislibToolbarItem>
+     </VislibToolbar>
     <main class="main-content">
       <template v-if="!running">
         <div class="image-selector-container">
@@ -173,13 +174,18 @@ onMounted(() => {
 
 <style scoped>
 
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .main-content {
   grid-column: 2 / 3;
   display: grid;
   grid-template: 1fr / 1fr;
-  gap: 3rem;
+  flex-grow: 1;
   color: var(--color-tertiary);
-  height: 90vh;
 }
 
 /* Components */
