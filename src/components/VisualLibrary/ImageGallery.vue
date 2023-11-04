@@ -17,7 +17,6 @@ defineProps({
 });
 
 const emit = defineEmits(['click:image', 'remove:image']);
-const showOverlay = ref(true);
 const imageGallery = ref();
 const imageSize = ref('128px'); // Initial image size
 
@@ -27,13 +26,9 @@ const imageSize = ref('128px'); // Initial image size
   <div ref="imageGallery" class="image-gallery">
     <ImageOverlay
         v-for="(img) of images"
-        :show="showOverlay"
         :key="img"
     >
-      <span class="image-container"
-            @mouseenter="showOverlay = true"
-            @mouseleave="showOverlay = false"
-      >
+      <span class="image-container">
         <ImageViewer
             :src="img"
             :size="imageSize"
@@ -42,13 +37,10 @@ const imageSize = ref('128px'); // Initial image size
         </ImageViewer>
       </span>
       <template #overlay>
-        <div class="overlay">
           <FontAwesomeIcon
               class="trash-icon"
               :icon="faTrash"
-              @click="emit('remove:image', img)"
-          />
-        </div>
+              @click="emit('remove:image', img)" />
       </template>
     </ImageOverlay>
   </div>
@@ -59,7 +51,8 @@ const imageSize = ref('128px'); // Initial image size
 
 .image-container > *:hover {
   padding: 1px; /* Prevents image from jumping when overlay is shown */
-  transform: scale(0.95);
+  transform: scale(0.98);
+  transition-duration: 0.1s;
 }
 
 .image-gallery {
@@ -85,8 +78,9 @@ const imageSize = ref('128px'); // Initial image size
 }
 
 .overlay:hover {
-  opacity: 100%;
+  opacity: 1;
   z-index: 1;
+  background-color: #cccccc;
 }
 
 .trash-icon {
@@ -104,9 +98,4 @@ const imageSize = ref('128px'); // Initial image size
   transform: scale(1.1);
 }
 
-@media (max-width: 768px) {
-  .preview-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
 </style>

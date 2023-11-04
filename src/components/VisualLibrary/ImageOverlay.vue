@@ -1,30 +1,22 @@
 <script setup>
 import { ref } from 'vue';
-import { onClickOutside } from '@vueuse/core';
+import {onClickOutside, useToggle} from '@vueuse/core';
 
 const overlay = ref(null);
-const isVisible = ref(false);
+const [showOverlay, toggleOverlay] = useToggle(false);
 
-function showOverlay() {
-  isVisible.value = true;
-}
-
-function hideOverlay() {
-  isVisible.value = false;
-}
-
-onClickOutside(overlay, hideOverlay);
+onClickOutside(overlay, toggleOverlay(false));
 
 </script>
 
 <template>
-  <div class="overlay-container" @mouseenter="showOverlay">
+  <div class="overlay-container" @mouseenter="toggleOverlay(true)">
     <slot></slot>
     <div ref='overlay'
          class="overlay"
-         v-show="isVisible"
-         @mouseleave="hideOverlay"
-         @click="showOverlay">
+         v-show="showOverlay"
+         @mouseleave="toggleOverlay(false)"
+         @click="toggleOverlay(false)">
       <slot name="overlay"></slot>
     </div>
   </div>
@@ -41,6 +33,8 @@ onClickOutside(overlay, hideOverlay);
   left: 0;
   z-index: 1;
   display: flex;
+  width: 100%;
+  height: 100%;
 }
 
 </style>
