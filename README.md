@@ -16,7 +16,7 @@ The app will mainly manage URLs, with the possible option to save images to disk
 1. Different practice modes (timed, iterative, free-form...)
 3. Drag-and-drop images from other sites in the library
 4. Support for albums
-5. TaggAnnotating and creating sub-regions in an image (like focusing on a hand in an otherwise full-body pose) and creating sessions from them.
+5. Annotating and creating sub-regions in an image (like focusing on a hand in an otherwise full-body pose) and creating sessions from them.
 6. Exporting and backing up images
 7. Mobile/Tablet responsiveness
 
