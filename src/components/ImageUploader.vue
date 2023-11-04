@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 import useImageReader from '../composables/useImageReader';
 
-const emit = defineEmits(['upload']);
+const emit = defineEmits(['import']);
 const fileInput = ref();
 
 function openFileDialog() {
@@ -12,16 +12,16 @@ function openFileDialog() {
 }
 
 onMounted(() => {
-  const uploads = useImageReader(fileInput);
-  watch(uploads, (value) => emit('upload', value));
+  const imports = useImageReader(fileInput);
+  watch(imports, (value) => emit('import', value));
 });
 
 </script>
 
 <template>
-  <span class="image-uploader-container">
-    <FontAwesomeIcon :icon="faUpload" class="image-uploader__icon"></FontAwesomeIcon>
-    <span class="upload-button" @click="openFileDialog"> Upload Images </span>
+  <span class="image-importer-container">
+    <FontAwesomeIcon :icon="faFileImport" class="image-importer__icon"></FontAwesomeIcon>
+    <span class="import-button" @click="openFileDialog"> Import Images </span>
     <input
         ref="fileInput"
         multiple
@@ -34,7 +34,7 @@ onMounted(() => {
 
 <style scoped>
 
-.image-uploader-container {
+.image-importer-container {
   display: flex;
   grid-template-columns: 1fr 1fr;
   color: var(--color-accent);
@@ -43,12 +43,12 @@ onMounted(() => {
   border-radius: 0;
 }
 
-.image-uploader__icon {
+.image-importer__icon {
   width: 2rem;
   height: auto;
 }
 
-.upload-button {
+.import-button {
   padding: 1rem;
   text-align: center;
 }
@@ -58,7 +58,7 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
-  .image-uploader-container {
+  .image-importer-container {
     grid-template-columns: 1fr;
   }
 }

@@ -1,7 +1,4 @@
 <script setup>
-import {faClipboard, faPlay, faSave, faUpload} from '@fortawesome/free-solid-svg-icons';
-import VislibToolbarItem from './VislibToolbarItem.vue';
-const emit = defineEmits(['start', 'paste', 'upload', 'save']);
 </script>
 
 <template>

@@ -2,9 +2,7 @@
 import {computed, onMounted, ref, watch} from 'vue';
 
 // Components
-import { faPlay, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
-import SessionSettings from './components/SessionSettings.vue';
-import ModeSelector from './components/ModeSelector/ModeSelector.vue';
+import { faPlay, faSave, faFileImport } from '@fortawesome/free-solid-svg-icons';
 import PracticeSession from './components/PracticeSession/PracticeSession.vue';
 import VislibToolbar from './components/VislibToolbar.vue';
 import VislibToolbarItem from './components/VislibToolbarItem.vue';
@@ -103,9 +101,9 @@ function addImages(added) {
   getSelectedTab().images.push(...added);
 }
 
-const {images: uploadedImages, input: uploadImages} = useImageInput();
+const {images: importedImages, input: importImages} = useImageInput();
 
-watch(uploadedImages, (value) => {
+watch(importedImages, (value) => {
   if (value.length === 0) return;
   addImages(value);
 });
@@ -143,7 +141,7 @@ onMounted(() => {
                 v-model:active-tab="selectedTab" />
      <VislibToolbar>
        <VislibToolbarItem :icon="faSave" @click='saveImages'>Save URLs</VislibToolbarItem>
-       <VislibToolbarItem :icon="faUpload" @click="uploadImages">Upload Images</VislibToolbarItem>
+       <VislibToolbarItem :icon="faFileImport" @click="importImages">Import Images</VislibToolbarItem>
        <VislibToolbarItem accent :icon="faPlay" @click="start">Start Session</VislibToolbarItem>
      </VislibToolbar>
     <main class="main-content">

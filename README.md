@@ -17,5 +17,5 @@ Web app for creating your own collection of references to practice drawing from.
 ### Nice to haves
 1. Support a simple drawing interface to allow users to draw from mobile/tablet.
 2. A "marketplace" for photos, like the other sites. At least a directory to other sites.
-3. Uploading sketches and playing them back to see improvement over time.
+3. importing sketches and playing them back to see improvement over time.
 4. Access to cloud services for storage
