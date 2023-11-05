@@ -1,11 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import {onClickOutside, useToggle} from '@vueuse/core';
+import { useToggle } from '@vueuse/core';
 
 const overlay = ref(null);
 const [showOverlay, toggleOverlay] = useToggle(false);
-
-onClickOutside(overlay, toggleOverlay(false));
 
 </script>
 

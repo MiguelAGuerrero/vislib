@@ -94,10 +94,10 @@ function validateName(index) {
     <div ref='tabsList' class="tabs-list">
       <span
           v-for='(tab, index) of tabs'
-          tabindex="0"
           class="tab hover"
           :key='index'
           :class="{'tab--active': isTabSelected(index)}"
+          :tabindex="index  === activeTab ? 0 : -1"
           @click="selectTab(index)"
       >
         <FontAwesomeIcon :icon="faEdit" v-show="isTabSelected(index)" />
@@ -126,7 +126,6 @@ function validateName(index) {
 .tabs-list {
   --tab-size: 2rem;
   display: flex;
-  padding: 0.5rem;
   gap: 0.5rem;
   overflow: auto;
   grid-auto-flow: column;
@@ -136,7 +135,6 @@ function validateName(index) {
 
 .tab {
   color: var(--color-accent);
-  border-radius: var(--border-radius);
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
@@ -145,7 +143,7 @@ function validateName(index) {
   transition-property: background-color, color, opacity;
   transition-duration: 0.1s;
   white-space: nowrap;
-  max-width: 25ch;
+  max-width: 10ch;
   flex: 1;
 }
 

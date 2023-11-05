@@ -37,10 +37,12 @@ const imageSize = ref('128px'); // Initial image size
         </ImageViewer>
       </span>
       <template #overlay>
+        <span class="overlay">
           <FontAwesomeIcon
               class="trash-icon"
               :icon="faTrash"
               @click="emit('remove:image', img)" />
+        </span>
       </template>
     </ImageOverlay>
   </div>
@@ -57,9 +59,8 @@ const imageSize = ref('128px'); // Initial image size
 
 .image-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 256px));
+  grid-template-columns: repeat(auto-fill, 256px);
   gap: 4px;
-  justify-content: center;
   align-content: start;
   padding: 4px;
 }
@@ -80,7 +81,7 @@ const imageSize = ref('128px'); // Initial image size
 .overlay:hover {
   opacity: 1;
   z-index: 1;
-  background-color: #cccccc;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .trash-icon {
@@ -96,6 +97,12 @@ const imageSize = ref('128px'); // Initial image size
 
 .trash-icon:hover {
   transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .image-gallery {
+    grid-template-columns: 1fr 1fr 1fr
+  }
 }
 
 </style>

@@ -151,6 +151,7 @@ onMounted(() => {
               class="image-selector"
               :images="selectedImages"
               @add="addImages"
+              @remove="removeImages"
           />
         </div>
 <!--      <div class="setting-options">
@@ -186,20 +187,13 @@ onMounted(() => {
   color: var(--color-tertiary);
 }
 
-/* Components */
-/* 1. Image Selector */
 .image-selector-container {
   display: grid;
 }
 
-.image-selector {
+.image-selector, .image-selector__tabs {
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
-}
-
-.image-selector__tabs {
-  border-top-left-radius: var(--border-radius);
-  border-top-right-radius: var(--border-radius);
 }
 
 </style>
