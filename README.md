@@ -1,6 +1,7 @@
 # vislib
 Web app for creating your own collection of references to practice drawing from.
-<img width="1347" alt="image" src="https://github.com/MiguelAGuerrero/vislib/assets/24864393/fab20003-8b67-4502-a258-f10b41fac237">
+<img width="1152" alt="image" src="https://github.com/MiguelAGuerrero/vislib/assets/24864393/d0ae5618-1fc2-4f2d-a30e-dc455fb357a4">
+
 
 ## Inspiration
 
@@ -24,3 +25,4 @@ The app will mainly manage URLs, with the possible option to save images to disk
 2. A "marketplace" for photos, like the other sites. At least a directory to other sites.
 3. Uploading sketches and playing them back to see improvement over time.
 4. Access to cloud services for backing-up local environments.
+5. AI image correction would be nice for low-resolution photos or subregions.

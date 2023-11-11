@@ -102,7 +102,7 @@ function validateName(index) {
           @click="selectTab(index)"
       >
         <FontAwesomeIcon class='action-edit' :icon="faEdit" v-show="isTabSelected(index)" @click="editing = index"/>
-        <input v-if="isTabSelected(index) && isEditing(index)" v-model="tab.name"
+        <input v-if="isTabSelected(index)" v-model="tab.name"
                @blur="validateName(index)"
                @click="selectTab(index)"/>
         <span class="tab__title" v-else>{{ tab.name }}</span>
@@ -165,6 +165,7 @@ function validateName(index) {
   color: var(--color-accent);
   position: relative;
   width: 100%;
+  font-size: 12px;
 }
 
 .tab:not(.tab--active) input {
