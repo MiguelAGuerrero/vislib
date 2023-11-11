@@ -47,7 +47,6 @@ const imageSize = ref('128px'); // Initial image size
     </ImageOverlay>
   </div>
 </template>
-
 <style scoped>
 
 

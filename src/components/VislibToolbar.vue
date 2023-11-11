@@ -16,6 +16,8 @@
   font-weight: bold;
   padding: 0.5rem;
   gap: 0.5rem;
+  max-height: 2.5rem;
+  border: 1px solid var(--color-primary);
 }
 
 .toolbar > * {
@@ -23,7 +25,7 @@
   color: var(--color-accent);
 }
 
-.toolbar > *:nth-last-child(1) {
+.toolbar > *:last-child {
   color : var(--color-primary);
   background-color: var(--color-accent);
 }

@@ -39,3 +39,9 @@
     border-radius: 0.5rem;
     overflow: clip;
 }
+
+.hover-highlight:hover {
+    outline: 1px solid var(--color-accent);
+    transition-property: outline-color, outline-width;
+    transition-duration: 0.25s;
+}

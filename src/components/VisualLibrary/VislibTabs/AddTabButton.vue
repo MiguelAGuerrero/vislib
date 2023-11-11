@@ -17,5 +17,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   aspect-ratio: 1;
   padding: 0;
   margin: auto 0;
+  border-radius: 0;
 }
 </style>

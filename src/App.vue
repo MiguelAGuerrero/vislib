@@ -1,14 +1,17 @@
 <script setup>
-import {computed, onMounted, ref, watch} from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 // Components
-import { faPlay, faSave, faFileImport } from '@fortawesome/free-solid-svg-icons';
+import { faFileImport, faGear, faPlay } from '@fortawesome/free-solid-svg-icons';
 import PracticeSession from './components/PracticeSession/PracticeSession.vue';
 import VislibToolbar from './components/VislibToolbar.vue';
 import VislibToolbarItem from './components/VislibToolbarItem.vue';
 import VislibTabs from './components/VisualLibrary/VislibTabs/VislibTabs.vue';
-import VisualLibrary from './components/VisualLibrary/VisualLibrary.vue';
+import VisualLibrary from './components/VisualLibrary';
 import useImageInput from './composables/useImageInput.js';
+import VislibOverlay from './components/VislibOverlay.vue';
+import ModeSelector from './components/ModeSelector/ModeSelector.vue';
+import VislibNavigationDrawer from './components/VislibNavigationDrawer';
 
 const LOCAL_STORAGE_KEY = 'referenceDrawingImages';
 const defaultImages = ref([
@@ -18,6 +21,7 @@ const defaultImages = ref([
 ]);
 
 const running = ref(false);
+const showOverlay = ref(false);
 
 // Settings
 const customSettings = ref({
@@ -40,6 +44,7 @@ function getSelectedTab() {
 }
 
 const selectedImages = computed(() => getSelectedTab().images || []);
+
 
 // An enum of the different modes
 const modes = {
@@ -78,23 +83,12 @@ const selectedModeSettings = computed(
   () => modeSettings[selectedMode.value.toLowerCase()].settings,
 );
 
-function saveImages() {
-  if (images.value.length === 0) return;
-  const fileData = images.value.join(',');
-  const blob = new Blob([fileData], { type: 'text/csv' });
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'images.csv';
-  link.click();
-  window.URL.revokeObjectURL(url);
-
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(images.value));
-}
+const showDrawer = ref(false);
 
 function start() {
   if (selectedImages.value.length === 0) return;
-  running.value = true;
+  // Open settings dialog
+  showOverlay.value = true;
 }
 
 function addImages(added) {
@@ -119,8 +113,8 @@ function selectTab(index) {
   else selectTab.value = tabs.value.length - 1;
 }
 
-function setImages(incoming) {
-  tabs.value[selectedTab].images = incoming;
+function setImages(images) {
+  tabs.value[selectedTab].images = images;
 }
 
 onMounted(() => {
@@ -130,34 +124,28 @@ onMounted(() => {
   setImages(storedData);
 });
 
-
 </script>
 
 <template>
   <div class='app-container'>
-      <VislibTabs :tabs="tabs"
-                class="image-selector__tabs"
-                v-model:tabs="tabs"
-                v-model:active-tab="selectedTab" />
-     <VislibToolbar>
-       <VislibToolbarItem :icon="faSave" @click='saveImages'>Save URLs</VislibToolbarItem>
-       <VislibToolbarItem :icon="faFileImport" @click="importImages">Import Images</VislibToolbarItem>
-       <VislibToolbarItem accent :icon="faPlay" @click="start">Start Session</VislibToolbarItem>
-     </VislibToolbar>
+    <VislibNavigationDrawer v-model="showDrawer" @selectAlbum="(album) => setImages(album.images)"/>
     <main class="main-content">
+      <VislibTabs :tabs="tabs"
+                  v-model:tabs="tabs"
+                  v-model:active-tab="selectedTab" />
+      <VislibToolbar>
+        <VislibToolbarItem :icon="faFileImport" @click="importImages">Import Images</VislibToolbarItem>
+        <VislibToolbarItem :icon="faGear" @click="showOverlay = true">Settings</VislibToolbarItem>
+        <VislibToolbarItem accent :icon="faPlay" @click="start">Start Session</VislibToolbarItem>
+      </VislibToolbar>
       <template v-if="!running">
-        <div class="image-selector-container">
+        <div>
           <VisualLibrary
-              class="image-selector"
               :images="selectedImages"
               @add="addImages"
               @remove="removeImages"
           />
         </div>
-<!--      <div class="setting-options">
-        <mode-selector v-model="selectedMode" />
-      </div>
-      <session-settings :settings="customSettings" v-show="selectedMode === modes.custom"/>-->
       </template>
       <practice-session v-if='running'
                         :images='selectedImages'
@@ -168,32 +156,21 @@ onMounted(() => {
                         :interval='selectedModeSettings.interval'
                         @done='running = false'/>
     </main>
+    <VislibOverlay v-model="showOverlay">
+      <ModeSelector v-model="selectedMode"></ModeSelector>
+    </VislibOverlay>
   </div>
 </template>
 
 <style scoped>
 
 .app-container {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  height: 100vh;
 }
 
 .main-content {
-  grid-column: 2 / 3;
-  display: grid;
-  grid-template: 1fr / 1fr;
   flex-grow: 1;
-  color: var(--color-tertiary);
-}
-
-.image-selector-container {
-  display: grid;
-}
-
-.image-selector, .image-selector__tabs {
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
 }
 
 </style>

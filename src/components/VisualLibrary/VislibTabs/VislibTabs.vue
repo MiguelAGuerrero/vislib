@@ -24,6 +24,7 @@ const props = defineProps({
 const emit = defineEmits(['update:activeTab', 'update:tabs']);
 const isOverflowing = ref(false);
 const tabsList = ref();
+const editing = ref(-1);
 
 function scrollTabList(amount) {
   tabsList.value.scrollBy({
@@ -100,12 +101,12 @@ function validateName(index) {
           :tabindex="index  === activeTab ? 0 : -1"
           @click="selectTab(index)"
       >
-        <FontAwesomeIcon :icon="faEdit" v-show="isTabSelected(index)" />
-        <input v-if="isTabSelected(index)" v-model="tab.name"
+        <FontAwesomeIcon class='action-edit' :icon="faEdit" v-show="isTabSelected(index)" @click="editing = index"/>
+        <input v-if="isTabSelected(index) && isEditing(index)" v-model="tab.name"
                @blur="validateName(index)"
                @click="selectTab(index)"/>
-        <span v-else>{{ tab.name }}</span>
-        <FontAwesomeIcon class='close-tab' :icon="faClose" @click="removeTab(index)" />
+        <span class="tab__title" v-else>{{ tab.name }}</span>
+        <FontAwesomeIcon class='action-close' :icon="faClose" @click="removeTab(index)" />
       </span>
       <AddTabButton @click="addTab" v-show="!isOverflowing"/>
     </div>
@@ -121,30 +122,32 @@ function validateName(index) {
   grid-auto-flow: column;
   border: var(--color-secondary) 1px solid;
   height: min-content;
+  font-size: 12px;
 }
 
 .tabs-list {
   --tab-size: 2rem;
   display: flex;
-  gap: 0.5rem;
   overflow: auto;
   grid-auto-flow: column;
   flex-grow: 1;
   max-width: 100%;
 }
 
+.tabs-list > *:last-child {
+  margin-left: 0.25rem;
+}
+
 .tab {
   color: var(--color-accent);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
   padding: 0.5rem 0.5rem;
   gap: 0.5rem;
   transition-property: background-color, color, opacity;
   transition-duration: 0.1s;
   white-space: nowrap;
-  max-width: 10ch;
-  flex: 1;
+  max-width: 10rem;
 }
 
 .hover:hover {
@@ -161,7 +164,6 @@ function validateName(index) {
   border: none;
   color: var(--color-accent);
   position: relative;
-  font-size: 1rem;
   width: 100%;
 }
 
@@ -169,23 +171,20 @@ function validateName(index) {
   background: none;
 }
 
-.close-tab {
-  align-self: center;
-  background: transparent;
+.tab__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1;
 }
 
-.close-tab {
-  display: flex;
-  place-content: center;
-  place-items: center;
-  cursor: pointer;
+.action-close {
   aspect-ratio: 1/1;
 }
 
-.close-tab:hover {
-  background-color: var(--color-tertiary);
-  border-radius: var(--border-radius);
-  color: var(--color-black);
+.action-close:hover {
+  background-color: var(--color-black);
+  color: var(--color-accent);
 }
 
 .tab--active {

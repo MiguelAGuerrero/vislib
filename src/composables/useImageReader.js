@@ -1,4 +1,4 @@
-import {ref, onMounted, onUnmounted, computed} from 'vue';
+import {ref, onMounted, onUnmounted} from 'vue';
 
 async function readImage(file) {
   return new Promise((resolve, reject) => {

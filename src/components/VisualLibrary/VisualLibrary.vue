@@ -63,7 +63,6 @@ function removeImage(imageUrl) {
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  background-color: var(--color-primary);
   color: var(--color-tertiary);
 }
 

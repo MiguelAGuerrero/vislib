@@ -1,4 +1,3 @@
-import {onUnmounted, ref} from 'vue';
 import useImageReader from './useImageReader.js';
 
 export default function useImageInput() {

@@ -14,8 +14,5 @@ module.exports = {
   },
   plugins: [
     'vue',
-  ],
-  rules: {
-    "import/no-extraneous-dependencies": "off"
-  },
+  ]
 };
